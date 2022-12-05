@@ -25,19 +25,11 @@
     "express": "^4.18.2",
     "joi": "^17.7.0",
     "jsonwebtoken": "^8.5.1",
-<<<<<<< HEAD
-    "prisma": "^4.7.0"
-  },
-  "dependencies": {
-    "@prisma/client": "^4.6.1",
-    "nodemon": "^2.0.20"
-=======
     "prisma": "^4.7.1"
   },
   "dependencies": {
     "@prisma/client": "^4.7.1",
     "exceljs": "^4.3.0",
     "multer": "^1.4.5-lts.1"
->>>>>>> d5c4372f2524fa3c5362e623deaa4c3717ae66a2
   }
 }
