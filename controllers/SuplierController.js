@@ -16,8 +16,6 @@ SuplierController.post('/', async (req, res) => {
 
     response.sendResponse(res, data)
 })
-
-
 SuplierController.put('/:id', async (req, res) => {
     const update = await suplier.updateSuplier(req.body, req.params.id)
 
