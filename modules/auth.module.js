@@ -61,7 +61,8 @@ class _auth {
 
             const payload = {
                 id: user.id,
-                nisp: user.nisp
+                nisp: user.nisp,
+                role_id: userRole.auth_role_id
             }
 
             const token = jwt.sign(payload, 'jwt-secret-code', { expiresIn: "8h" })
