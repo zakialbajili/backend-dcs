@@ -5,6 +5,7 @@ const AuthUserController = require("./controllers/AuthUserController")
 const MaterialReceiveController = require("./controllers/MaterialReceiveController")
 const RackController = require("./controllers/RackController")
 const BatchController = require("./controllers/BatchMaterialController")
+const SeederController = require("./controllers/SeederController")
 
 const _routes = [
     ['users', UserController],
@@ -13,6 +14,7 @@ const _routes = [
     ['rack', RackController],
     ['materialReceive', MaterialReceiveController],
     ['batch', BatchController],
+    ['seeder', SeederController],
     ['', AuthUserController]
 ]
 
