@@ -23,9 +23,9 @@ class _suplier {
         try {
             const schema = Joi.object({
                 name: Joi.string().required(),
-                email: Joi.string().email().require(),
-                phone: Joi.string().length(10).pattern(/^[0-9]+$/).required(), // for string but number for number phone
-                address: Joi.string().min(15).required(),
+                email: Joi.string().required(),
+                phone: Joi.string().pattern(/^[0-9]+$/).required(), // for string but number for number phone
+                address: Joi.string().required(),
             })
             const validation = schema.validate(body)
             if (validation.error) {
@@ -72,6 +72,7 @@ class _suplier {
 
             return {
                 status: true,
+                message: "berhasil di delete",
                 code: 200
             }
         } catch (error) {
@@ -82,12 +83,12 @@ class _suplier {
             }
         }
     }
-    updateUser = async (body, id) => {
+    updateSuplier = async (body, id) => {
         try {
             const schema = Joi.object({
                 name: Joi.string().required(),
-                email: Joi.string().email().require(),
-                phone: Joi.string().length(10).pattern(/^[0-9]+$/).required(), // for string but number for number phone
+                email: Joi.string().required(),
+                phone: Joi.string().pattern(/^[0-9]+$/).required(), // for string but number for number phone
                 address: Joi.string().min(15).required(),
             })
             const validation = schema.validate(body)
@@ -116,6 +117,7 @@ class _suplier {
             return {
                 status: true,
                 code: 200,
+                message: "berhasil di update",
                 data: update
             }
         } catch (error) {
@@ -127,3 +129,5 @@ class _suplier {
         }
     }
 }
+
+module.exports = new _suplier();
