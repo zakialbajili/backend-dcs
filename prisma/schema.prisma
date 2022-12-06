@@ -142,11 +142,11 @@ model MaterialReceive {
   id                Int                @id @default(autoincrement())
   arrival_date      DateTime           @db.Date
   type              String             @db.VarChar(200)
-  material          Material           @relation(fields: [material_id], references: [id])
-  batch_material    BatchMaterial      @relation(fields: [batch_material_id], references: [id])
+  material          Material?          @relation(fields: [material_id], references: [id])
+  batch_material    BatchMaterial?     @relation(fields: [batch_material_id], references: [id])
   travel_doc        TravelDoc          @relation(fields: [travel_doc_id], references: [id])
-  material_id       Int
-  batch_material_id Int
+  material_id       Int?
+  batch_material_id Int?
   travel_doc_id     Int
   weight            Int
   created_at        DateTime           @default(now())

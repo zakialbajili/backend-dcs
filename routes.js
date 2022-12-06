@@ -2,7 +2,7 @@ const UserController = require("./controllers/UserController")
 const RoleController = require("./controllers/RoleController")
 const UserRoleController = require("./controllers/UserRoleController")
 const AuthUserController = require("./controllers/AuthUserController")
-const ReceiveController = require("./controllers/ReceiveController")
+const MaterialReceiveController = require("./controllers/MaterialReceiveController")
 const RackController = require("./controllers/RackController")
 
 const _routes = [
@@ -10,7 +10,7 @@ const _routes = [
     ['roles', RoleController],
     ['userRoles', UserRoleController],
     ['rack', RackController],
-    ['receive', ReceiveController],
+    ['materialReceive', MaterialReceiveController],
     ['', AuthUserController]
 ]
 
@@ -18,7 +18,7 @@ const routes = (app) => {
     _routes.forEach(route => {
         const [url, controller] = route
 
-        // http://localhost:8000/api
+        // http://localhost:8080/api
         app.use(`/api/${url}`, controller)
     })
 }
