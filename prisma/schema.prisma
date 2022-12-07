@@ -56,7 +56,6 @@ model Supplier {
   Rack          Rack[]
   TravelDoc     TravelDoc[]
   Part          Part[]
-
   @@map("suppliers")
 }
 
