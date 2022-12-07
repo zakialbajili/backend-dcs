@@ -126,7 +126,7 @@ model Pallete {
 
 model TravelDoc {
   id                Int               @id @default(autoincrement())
-  number_travel_doc String            @db.VarChar(200)
+  number_travel_doc String            @unique @db.VarChar(200)
   supllier          Supplier          @relation(fields: [supplier_id], references: [id])
   auth_user         AuthUser          @relation(fields: [auth_user_id], references: [id])
   auth_user_id      Int

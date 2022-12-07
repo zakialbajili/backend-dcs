@@ -93,8 +93,6 @@ class _receive {
                 indexCheck++
             }
 
-            console.log("data excel " + countDataExcel)
-
             while (indexStore < alldata.length) {
                 let supplierId
                 let materialId
@@ -134,13 +132,20 @@ class _receive {
                     }
                 }
                 if (!travelDoc.find(traveldoc => traveldoc.number_travel_doc === alldata[indexStore].No)) {
-                    await prisma.travelDoc.create({
-                        data: {
-                            number_travel_doc: alldata[indexStore].No,
-                            auth_user_id: 1,
-                            supplier_id: supplierId
+                    const countTravelDoc = await prisma.travelDoc.count({
+                        where: {
+                            number_travel_doc: alldata[indexStore].No
                         }
                     })
+                    if (countTravelDoc == 0) {
+                        await prisma.travelDoc.create({
+                            data: {
+                                number_travel_doc: alldata[indexStore].No,
+                                auth_user_id: req.users.id,
+                                supplier_id: supplierId
+                            }
+                        })
+                    }
                 }
 
                 const travelDocStore = await prisma.travelDoc.findFirst({
@@ -149,7 +154,6 @@ class _receive {
                     }
                 })
 
-                // console.log(travelDocStore.id);
                 const materialReceiveStore = await prisma.materialReceive.create({
                     data: {
                         arrival_date: alldata[indexStore].Date,
