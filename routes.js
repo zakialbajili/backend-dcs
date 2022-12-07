@@ -2,12 +2,16 @@ const UserController = require("./controllers/UserController")
 const RoleController = require("./controllers/RoleController")
 const UserRoleController = require("./controllers/UserRoleController")
 const AuthUserController = require("./controllers/AuthUserController")
+const hwoController = require("./controllers/history_work_orderController")
+const supplierController = require("./controllers/SupplierController")
 
 const _routes = [
     ['users', UserController],
     ['roles', RoleController],
     ['userRoles', UserRoleController],
-    ['', AuthUserController]
+    ['', AuthUserController],
+    ['history_work_order', hwoController],
+    ['supplier', supplierController]
 ]
 
 const routes = (app) => {

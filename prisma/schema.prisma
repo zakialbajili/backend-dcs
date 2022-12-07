@@ -56,6 +56,8 @@ model Supplier {
   Rack          Rack[]
   TravelDoc     TravelDoc[]
   Part          Part[]
+  work_order    work_order[]
+  delivery      delivery[]
 
   @@map("suppliers")
 }
@@ -173,6 +175,7 @@ model PlacementPallete {
 model Part {
   id                  Int           @id @default(autoincrement())
   part_number         String        @db.VarChar(200)
+  part_name String @db.VarChar(200)
   die_cavity          Int
   cycle_time          Int
   target_pcs_per_shit Int
@@ -191,4 +194,47 @@ model Part {
   batch_material_id   Int
   created_at          DateTime      @default(now())
   updated_at          DateTime      @updatedAt
+  delivery delivery[]
+}
+
+model history_work_order {
+  id          Int          @id @default(autoincrement())
+  name_file   String       @db.Char(200)
+  upload_date DateTime     @default(now())
+  time        DateTime     @default(now())
+  work_order  work_order[]
+}
+
+model work_order {
+  id                 Int                @id @default(autoincrement())
+  history_work_order history_work_order @relation(fields: [id_file], references: [id])
+  id_file            Int
+  no_work_order      String             @db.Char(200)
+  part_name          String             @db.Char(200)
+  customer           String             @db.Char(200)
+  prod_date          DateTime           @default(now())
+  quantity_perbox    Int
+  total_order        Int
+  total_box          Int
+  supplier           Supplier           @relation(fields: [supplier_id], references: [id])
+  supplier_id        Int
+  delivery           delivery[]
+}
+
+model delivery {
+  id              Int        @id @default(autoincrement())
+  Part Part @relation(fields: [part_number], references: [id])
+  part_number     Int
+  part_name       String     @db.Char(200)
+  total_order     Int
+  prod_date       DateTime   @default(now())
+  work_order      work_order @relation(fields: [no_work_order], references: [id])
+  no_work_order   Int
+  supplier        Supplier   @relation(fields: [supplier_id], references: [id])
+  supplier_id     Int
+  quantity_perbox Int
+  customer        String     @db.Char(200)
+  deliv_date DateTime @default(now())
+  deliv_number String @db.VarChar(200)
+  total_box       Int
 }
