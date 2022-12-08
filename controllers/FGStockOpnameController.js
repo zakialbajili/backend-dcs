@@ -12,12 +12,6 @@ MaterialController.get('/receives', auth, async (req, res) => {
 })
 
 // SW.C
-MaterialController.get('/stock', auth, async (req, res) => {
-    const list = await m$auth.listMaterialReceives()
-
-    response.sendResponse(res, list)
-})
-
 MaterialController.get('/in', auth, async (req, res) => {
     const list = await m$auth.listMaterialReceives()
 
