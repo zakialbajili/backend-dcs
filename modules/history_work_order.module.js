@@ -56,7 +56,42 @@ class _hwo {
                     error
                 }
             }
-        } 
+        }
+        
+    deletehwo = async (id) => {
+            try {
+                const schema = Joi.number().required()
+    
+                const validation = schema.validate(id)
+
+                if (validation.error) {
+                    const errorDetails = validation.error.details.map(detail => detail.message)
+    
+                    return {
+                        status: false,
+                        code: 422,
+                        error: errorDetails.join(', ')
+                    }
+                }
+                const data = await prisma.history_work_order.delete({
+                    where: {
+                        id: id
+                    }
+                })
+                    return{
+    
+                        status: true,
+                        data: data
+                    }
+                } catch (error){
+                    console.log('deleteWho who module Error:', error)
+        
+                    return{
+                        status: false,
+                        error
+                    }
+                }
+            }
             
 }
 module.exports = new _hwo()
