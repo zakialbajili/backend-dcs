@@ -14,7 +14,7 @@ const _routes = [
     ['material', MaterialController],
     ['summary', SummaryController],
     ['production', FGproductionController],
-    ['fg/stock', FGStockOpnameController]
+    ['fg/stock', FGStockOpnameController],
     ['', AuthUserController]
 ]
 
