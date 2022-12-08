@@ -11,13 +11,15 @@ datasource db {
 }
 
 model AuthUser {
-  id           Int            @id @default(autoincrement())
-  nisp         String         @unique @db.VarChar(25)
-  password     String?
-  created_at   DateTime       @default(now())
-  updated_at   DateTime       @updatedAt
-  AuthUserRole AuthUserRole[]
-  TravelDoc    TravelDoc[]
+  id              Int               @id @default(autoincrement())
+  nisp            String            @unique @db.VarChar(25)
+  password        String?
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  AuthUserRole    AuthUserRole[]
+  TravelDoc       TravelDoc[]
+  FileWorkOrder   FileWorkOrder[]
+  WorkOrderDetail WorkOrderDetail[]
 
   @@map("auth_users")
 }
@@ -175,7 +177,7 @@ model PlacementPallete {
 model Part {
   id                  Int           @id @default(autoincrement())
   part_number         String        @db.VarChar(200)
-  part_name String @db.VarChar(200)
+  part_name           String        @db.VarChar(200)
   die_cavity          Int
   cycle_time          Int
   target_pcs_per_shit Int
@@ -194,7 +196,7 @@ model Part {
   batch_material_id   Int
   created_at          DateTime      @default(now())
   updated_at          DateTime      @updatedAt
-  delivery delivery[]
+  delivery            delivery[]
 }
 
 model history_work_order {
@@ -219,11 +221,12 @@ model work_order {
   supplier           Supplier           @relation(fields: [supplier_id], references: [id])
   supplier_id        Int
   delivery           delivery[]
+  WorkOrderDetail    WorkOrderDetail[]
 }
 
 model delivery {
   id              Int        @id @default(autoincrement())
-  Part Part @relation(fields: [part_number], references: [id])
+  Part            Part       @relation(fields: [part_number], references: [id])
   part_number     Int
   part_name       String     @db.Char(200)
   total_order     Int
@@ -234,7 +237,61 @@ model delivery {
   supplier_id     Int
   quantity_perbox Int
   customer        String     @db.Char(200)
-  deliv_date DateTime @default(now())
-  deliv_number String @db.VarChar(200)
+  deliv_date      DateTime   @default(now())
+  deliv_number    String     @db.VarChar(200)
   total_box       Int
+}
+
+model FileWorkOrder {
+  id             Int      @id @default(autoincrement())
+  auth_user      AuthUser @relation(fields: [user_id], references: [id])
+  user_id        Int
+  filename       String   @db.VarChar(200)
+  file_mime      String   @db.VarChar(200)
+  file_path      String   @db.VarChar(200)
+  file_extension String   @db.VarChar(200)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  @@map("file_work_order")
+}
+
+model WorkOrderDetail {
+  id                Int               @id @default(autoincrement())
+  auth_user         AuthUser          @relation(fields: [confirmation_user], references: [id])
+  work_order        work_order        @relation(fields: [work_order_id], references: [id])
+  work_order_id     Int
+  quantity          Int
+  quantity_ng       Int
+  confirmation      Int               @default(0)
+  confirmation_user Int               @default(0)
+  confirmation_date DateTime
+  created_at        DateTime          @default(now())
+  updated_at        DateTime          @updatedAt
+  ProductionScrap   ProductionScrap[]
+
+  @@map("work_order_detail")
+}
+
+model MasterScrap {
+  id              Int               @id @default(autoincrement())
+  name            String            @db.VarChar(200)
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  ProductionScrap ProductionScrap[]
+
+  @@map("master_scrap")
+}
+
+model ProductionScrap {
+  id                Int             @id @default(autoincrement())
+  work_order_detail WorkOrderDetail @relation(fields: [wo_detail_id], references: [id])
+  wo_detail_id      Int
+  master_scrap      MasterScrap     @relation(fields: [scrap_id], references: [id])
+  scrap_id          Int
+  qty               Int
+  created_at        DateTime        @default(now())
+  updated_at        DateTime        @updatedAt
+
+  @@map("production_scraps")
 }
