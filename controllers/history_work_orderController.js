@@ -13,6 +13,13 @@ const hwoController = Router()
     
         response.sendResponse(res, data)
     })
+
+    hwoController.get('/', async (req, res) => {
+        const data = await m$hwo.gethwo({
+        })
+    
+        response.sendResponse(res, data)
+    })
     
     
     module.exports = hwoController

@@ -40,6 +40,23 @@ class _hwo {
         }
     }
 
+    gethwo = async (body) => {
+        try {
+            const data = await prisma.history_work_order.findMany()
+                return{
+
+                    status: true,
+                    data: data
+                }
+            } catch (error){
+                console.log('listWho who module Error:', error)
     
+                return{
+                    status: false,
+                    error
+                }
+            }
+        } 
+            
 }
 module.exports = new _hwo()
