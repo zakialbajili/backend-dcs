@@ -19,9 +19,10 @@ class _hwo {
                     error: errorDetails.join(', ')
                 }
             }
+            console.log(body)
             const add = await prisma.history_work_order.create({
                 data: {
-                    name_file: body.filename,
+                    name_file: body.name_file
                 }
             })
 
