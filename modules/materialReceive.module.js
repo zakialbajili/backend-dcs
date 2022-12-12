@@ -1,6 +1,8 @@
 const prisma = require('../helpers/database')
 const excel = require("exceljs");
+const Joi = require("joi");
 const moment = require('moment');
+const fs = require("fs");
 
 
 class _receive {
@@ -14,7 +16,7 @@ class _receive {
             }
 
             const workbook = new excel.Workbook();
-            await workbook.xlsx.load(req.file.buffer);
+            await workbook.xlsx.readFile(req.file.path);
 
             const worksheet = workbook.getWorksheet(1);
 
@@ -93,6 +95,17 @@ class _receive {
                 indexCheck++
             }
 
+            const fileStore = await prisma.fileMaterialReceive.create({
+                data: {
+                    filename: req.file.filename,
+                    original_filename: req.file.originalname,
+                    file_mime: req.file.mimetype,
+                    file_path: req.file.path,
+                    file_extension: 'xlsx',
+                    user_id: req.users.id
+                }
+            })
+
             while (indexStore < alldata.length) {
                 let supplierId
                 let materialId
@@ -142,7 +155,8 @@ class _receive {
                             data: {
                                 number_travel_doc: alldata[indexStore].No,
                                 auth_user_id: req.users.id,
-                                supplier_id: supplierId
+                                supplier_id: supplierId,
+                                file_material_id: fileStore.id
                             }
                         })
                     }
@@ -161,7 +175,8 @@ class _receive {
                         material_id: materialId,
                         batch_material_id: batchMaterialId,
                         travel_doc_id: travelDocStore.id,
-                        weight: alldata[indexStore].Weight
+                        weight: alldata[indexStore].Weight,
+                        file_material_id: fileStore.id
                     }
                 })
                 indexStore++
@@ -169,14 +184,15 @@ class _receive {
 
             const data = await prisma.materialReceive.findMany({
                 where: {
-                    created_at: {
-                        gte: now
+                    file_material_receive: {
+                        filename: req.file.filename
                     }
                 },
                 include: {
                     material: true,
                     batch_material: true,
                     travel_doc: true,
+                    file_material_receive: true,
                 }
             })
 
@@ -194,9 +210,56 @@ class _receive {
         }
     }
 
-    // download = async (req) => {
+    destroy = async (id) => {
+        try {
+            const schema = Joi.number().required()
 
-    // }
+            const validation = schema.validate(id)
+
+            if (validation.error) {
+                const errorDetails = validation.error.details.map(detail => detail.message)
+
+                return {
+                    status: false,
+                    code: 422,
+                    error: errorDetails.join(', ')
+                }
+            }
+
+            const destroymaterial = await prisma.materialReceive.deleteMany({
+                where: {
+                    file_material_id: parseInt(id)
+                },
+            })
+
+            const deleteTravelDoc = await prisma.travelDoc.deleteMany({
+                where: {
+                    file_material_id: parseInt(id)
+                },
+            })
+
+            const destroyfile = await prisma.fileMaterialReceive.delete({
+                where: {
+                    id: parseInt(id)
+                }
+            })
+
+            fs.unlinkSync(destroyfile.file_path)
+
+            return {
+                status: true,
+                code: 201,
+                data: [destroyfile, deleteTravelDoc, destroymaterial],
+                message: 'File berhasil dihapus'
+            }
+        } catch (error) {
+            console.error('Destroy receive module Error: ', error);
+            return {
+                status: false,
+                error
+            }
+        }
+    }
 }
 
 module.exports = new _receive()

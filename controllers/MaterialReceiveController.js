@@ -12,10 +12,10 @@ MaterialReceiveController.post('/upload', [upload.single("file"), authorization]
     response.sendResponse(res, upload)
 })
 
-MaterialReceiveController.get('/download/:m', async (req, res) => {
-    const download = await m$receive.download(req)
+MaterialReceiveController.delete('/:id', async (req, res) => {
+    const destroy = await m$receive.destroy(req.params.id)
 
-    response.sendResponse(res, download)
+    response.sendResponse(res, destroy)
 })
 
 module.exports = MaterialReceiveController

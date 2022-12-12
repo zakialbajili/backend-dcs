@@ -11,13 +11,14 @@ datasource db {
 }
 
 model AuthUser {
-  id           Int            @id @default(autoincrement())
-  nisp         String         @unique @db.VarChar(25)
-  password     String?
-  created_at   DateTime       @default(now())
-  updated_at   DateTime       @updatedAt
-  AuthUserRole AuthUserRole[]
-  TravelDoc    TravelDoc[]
+  id                  Int            @id @default(autoincrement())
+  nisp                String         @unique @db.VarChar(25)
+  password            String?
+  created_at          DateTime       @default(now())
+  updated_at          DateTime       @updatedAt
+  AuthUserRole        AuthUserRole[]
+  TravelDoc           TravelDoc[]
+  FileMaterialReceive FileMaterialReceive[]
 
   @@map("auth_users")
 }
@@ -100,8 +101,7 @@ model Rack {
   supplier_id      Int
   created_at       DateTime           @default(now())
   updated_at       DateTime           @updatedAt
-  Pallete          Pallete[]
-  PlacementPallete PlacementPallete[]
+  PlacementRack    PlacementRack[]
 
   @@map("racks")
 }
@@ -113,12 +113,9 @@ model Pallete {
   address          String             @db.Char(200)
   max_capacity     Int
   supllier         Supplier           @relation(fields: [supplier_id], references: [id])
-  rack             Rack               @relation(fields: [rack_id], references: [id])
   supplier_id      Int
-  rack_id          Int
   created_at       DateTime           @default(now())
   updated_at       DateTime           @updatedAt
-  PlacementPallete PlacementPallete[]
 
   @@map("palletes")
 }
@@ -128,8 +125,10 @@ model TravelDoc {
   number_travel_doc String            @unique @db.VarChar(200)
   supllier          Supplier          @relation(fields: [supplier_id], references: [id])
   auth_user         AuthUser          @relation(fields: [auth_user_id], references: [id])
+  file_material_receive FileMaterialReceive @relation(fields: [file_material_id], references: [id])
   auth_user_id      Int
   supplier_id       Int
+  file_material_id  Int
   created_at        DateTime          @default(now())
   updated_at        DateTime          @updatedAt
   MaterialReceive   MaterialReceive[]
@@ -138,35 +137,52 @@ model TravelDoc {
 }
 
 model MaterialReceive {
-  id                Int                @id @default(autoincrement())
-  arrival_date      DateTime           @db.Date
-  type              String             @db.VarChar(200)
-  material          Material?          @relation(fields: [material_id], references: [id])
-  batch_material    BatchMaterial?     @relation(fields: [batch_material_id], references: [id])
-  travel_doc        TravelDoc          @relation(fields: [travel_doc_id], references: [id])
-  material_id       Int?
-  batch_material_id Int?
-  travel_doc_id     Int
-  weight            Int
-  created_at        DateTime           @default(now())
-  updated_at        DateTime           @updatedAt
-  PlacementPallete  PlacementPallete[]
+  id                    Int            @id @default(autoincrement())
+  arrival_date          DateTime       @db.Date
+  type                  String         @db.VarChar(200)
+  material              Material?      @relation(fields: [material_id], references: [id])
+  batch_material        BatchMaterial? @relation(fields: [batch_material_id], references: [id])
+  travel_doc            TravelDoc      @relation(fields: [travel_doc_id], references: [id])
+  file_material_receive FileMaterialReceive @relation(fields: [file_material_id], references: [id])
+  material_id           Int?
+  batch_material_id     Int?
+  travel_doc_id         Int
+  file_material_id      Int
+  weight                Int
+  created_at            DateTime        @default(now())
+  updated_at            DateTime        @updatedAt
+  PlacementRack         PlacementRack[]
 
   @@map("material_receives")
 }
 
-model PlacementPallete {
+model FileMaterialReceive {
+  id                Int               @id @default(autoincrement())
+  auth_user         AuthUser          @relation(fields: [user_id], references: [id])
+  MaterialReceive   MaterialReceive[]
+  TravelDoc         TravelDoc[]
+  user_id           Int
+  filename          String            @unique @db.VarChar(200)
+  original_filename String            @db.VarChar(200)
+  file_mime         String            @db.VarChar(200)
+  file_path         String            @db.VarChar(200)
+  file_extension    String            @db.VarChar(200)
+  created_at        DateTime          @default(now())
+  updated_at        DateTime          @updatedAt
+
+  @@map("file_material_receive")
+}
+
+model PlacementRack {
   id                  Int             @id @default(autoincrement())
   material_receive    MaterialReceive @relation(fields: [material_receive_id], references: [id])
-  pallete             Pallete         @relation(fields: [pallete_id], references: [id])
   rack                Rack            @relation(fields: [rack_id], references: [id])
   material_receive_id Int
-  pallete_id          Int
   rack_id             Int
   created_at          DateTime        @default(now())
   updated_at          DateTime        @updatedAt
 
-  @@map("placement_palletes")
+  @@map("placement_rack")
 }
 
 model Part {

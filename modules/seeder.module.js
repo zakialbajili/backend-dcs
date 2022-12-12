@@ -66,6 +66,19 @@ class __seeder {
                 ], skipDuplicates: true
             })
 
+            await prisma.rack.createMany({
+                data: [
+                    { rack_number: "R-HPS11", rack_name: "Rack HPS11", address: "A1.01.01", max_capacity: 1000000, supplier_id: 2 },
+                    { rack_number: "R-MB35", rack_name: "Rack MB35", address: "B1.02.02", max_capacity: 2000000, supplier_id: 2 },
+                    { rack_number: "R-HPS12", rack_name: "Rack HPS12", address: "C1.03.03", max_capacity: 800000, supplier_id: 2 },
+                    { rack_number: "R-MB36", rack_name: "Rack MB36", address: "D1.04.04", max_capacity: 3000000, supplier_id: 2 },
+                    { rack_number: "R-HPS13", rack_name: "Rack HPS13", address: "A1.01.01", max_capacity: 1000, supplier_id: 5 },
+                    { rack_number: "R-MB37", rack_name: "Rack MB37", address: "B1.02.02", max_capacity: 500, supplier_id: 5 },
+                    { rack_number: "R-HPS14", rack_name: "Rack HPS14", address: "A1.01.01", max_capacity: 1000, supplier_id: 5 },
+                    { rack_number: "R-MB38", rack_name: "Rack MB38", address: "B1.02.02", max_capacity: 500, supplier_id: 5 },
+                ]
+            })
+
             return {
                 status: true,
                 code: 200
