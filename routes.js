@@ -3,6 +3,7 @@ const RoleController = require("./controllers/RoleController")
 const UserRoleController = require("./controllers/UserRoleController")
 const AuthUserController = require("./controllers/AuthUserController")
 const hwoController = require("./controllers/history_work_orderController")
+const wodController = require("./controllers/work_order_detailController")
 const supplierController = require("./controllers/SupplierController")
 
 const _routes = [
@@ -11,6 +12,7 @@ const _routes = [
     ['userRoles', UserRoleController],
     ['', AuthUserController],
     ['history_work_order', hwoController],
+    ['work_order_detail', wodController],
     ['supplier', supplierController]
 ]
 

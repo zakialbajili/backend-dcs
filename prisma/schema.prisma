@@ -19,7 +19,6 @@ model AuthUser {
   AuthUserRole    AuthUserRole[]
   TravelDoc       TravelDoc[]
   FileWorkOrder   FileWorkOrder[]
-  WorkOrderDetail WorkOrderDetail[]
 
   @@map("auth_users")
 }
@@ -202,8 +201,8 @@ model Part {
 model history_work_order {
   id          Int          @id @default(autoincrement())
   name_file   String       @db.Char(200)
-  upload_date DateTime     @default(now())
-  time        DateTime     @default(now())
+  upload_date DateTime     @default(now()) @db.Date
+  time        DateTime     @default(now()) @db.Time()
   work_order  work_order[]
 }
 
@@ -258,14 +257,12 @@ model FileWorkOrder {
 
 model WorkOrderDetail {
   id                Int               @id @default(autoincrement())
-  auth_user         AuthUser          @relation(fields: [confirmation_user], references: [id])
   work_order        work_order        @relation(fields: [work_order_id], references: [id])
   work_order_id     Int
   quantity          Int
-  quantity_ng       Int
+  quantity_ng       Int @default(0)
   confirmation      Int               @default(0)
   confirmation_user Int               @default(0)
-  confirmation_date DateTime
   created_at        DateTime          @default(now())
   updated_at        DateTime          @updatedAt
   ProductionScrap   ProductionScrap[]

@@ -1,6 +1,7 @@
 const prisma = require("../helpers/database")
 const Joi = require("joi")
 const XLSX = require ('xlsx')
+const m$wodetail = require('./work_order_detail.module')
 class _wo {
     upload_wo = async (body)=>{
         try{
@@ -35,7 +36,10 @@ class _wo {
                     name_file:body.filename
                 }
             })
-            let add
+            
+            let total_box
+            var data=[]
+            let addWo
             for (let i = 0; i< worksheets.Sheet1.length; i++){
                 //console.log(worksheets.Sheet1)
                 let part_name=worksheets.Sheet1[i].part_name
@@ -43,9 +47,16 @@ class _wo {
                 let customer=worksheets.Sheet1[i].customer
                 let quantity_perbox=worksheets.Sheet1[i].quantity_perbox
                 let total_order=worksheets.Sheet1[i].total_order
-                let total_box=total_order/quantity_perbox
+                total_box=total_order/quantity_perbox
                 let supplier_id=worksheets.Sheet1[i].supplier
-                
+                let history_work_order = await prisma.history_work_order.findFirst({
+                    where:{
+                        id:inputhwo.id
+                    },
+                    select:{
+                        id:true
+                    }
+                })
                 let supplier = await prisma.supplier.findFirst({
                     where: {
                         name: supplier_id
@@ -54,7 +65,6 @@ class _wo {
                         id: true
                     }
                 })
-                //console.log(supplier.id)
                 if (!supplier) {
                     return {
                         status: false,
@@ -62,9 +72,9 @@ class _wo {
                         error: 'Supplier not found'
                     }
                 }    
-                 add = await prisma.work_order.create({
+                addWo = await prisma.work_order.create({
                     data: {
-                        id_file: 1,
+                        id_file: history_work_order.id,
                         part_name: part_name,
                         no_work_order: no_work_order,
                         customer : customer,
@@ -73,23 +83,35 @@ class _wo {
                         total_box: total_box,
                         supplier_id: supplier.id
                      }
-                    })
-                
-                console.log(add)
-                }
-                for(let j=0; j<total_box; j++){
-
-                }
-                return {
-                    status: true,
-                    code: 201,
-                    data: add
-                }
-            /*const add = await prisma.history_work_order.create({
-                data: {
-                    name_file: body.name_file
-                }
-            })*/
+                })
+                data.push(addWo)
+            }
+            await m$wodetail.woDetail(data)
+            /*for(let j=0; j<total_box; j++){
+                let workOrder = await prisma.work_order.findFirst({
+                    where: {
+                        id: addWo.id
+                    },
+                    select: {
+                        id: true,
+                        quantity_perbox: true
+                    }
+                })
+                console.log(workOrder.id)
+                console.log(workOrder.quantity_perbox)
+                //console.log(addWo.id)
+                inputwodetail = await prisma.work_order_detail.create({
+                    data: {
+                        work_order_id: workOrder.id,
+                        quantity:workOrder.quantity_perbox,
+                    }
+                })
+            }*/
+            return {
+                status: true,
+                code: 201,
+                data: addWo
+            }
         } catch (error) {
             console.error('historyWorkOrder hwo module Error:', error);
             return {
