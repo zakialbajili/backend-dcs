@@ -12,7 +12,25 @@ MaterialReceiveController.post('/upload', [upload.single("file"), authorization]
     response.sendResponse(res, upload)
 })
 
-MaterialReceiveController.delete('/:id', async (req, res) => {
+MaterialReceiveController.get('/', authorization, async (req, res) => {
+    const list = await m$receive.getFile()
+
+    response.sendResponse(res, list)
+})
+
+MaterialReceiveController.get('/:id', authorization, async (req, res) => {
+    const list = await m$receive.getMaterialReceive(req.params.id)
+
+    response.sendResponse(res, list)
+})
+
+MaterialReceiveController.put('/:id', authorization, async (req, res) => {
+    const update = await m$receive.updateMaterialReceive(req.body, req.params.id)
+
+    response.sendResponse(res, update)
+})
+
+MaterialReceiveController.delete('/:id', authorization, async (req, res) => {
     const destroy = await m$receive.destroy(req.params.id)
 
     response.sendResponse(res, destroy)

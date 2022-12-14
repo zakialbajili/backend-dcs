@@ -64,6 +64,15 @@ class _receive {
             const travelDoc = await prisma.travelDoc.findMany()
 
             while (indexCheck < alldata.length) {
+                if (travelDoc.length !== 0 && travelDoc.find(travel => travel.number_travel_doc === alldata[indexCheck].No)) {
+                    console.error("data travel doc column " + (indexCheck + 1) + "already exist")
+                    return {
+                        status: false,
+                        code: 404,
+                        error: "data supplier from excel doesn't match with data supplier on database"
+                    }
+                }
+
                 if (!suppliers.find(supplier => supplier.name === alldata[indexCheck].Supplier)) {
 
                     console.error("data supplier column " + (indexCheck + 1) + " not found on database")
@@ -143,7 +152,7 @@ class _receive {
                         })
                         batchMaterialId = batchMaterialStore.id
                     }
-                }
+                }              
                 if (!travelDoc.find(traveldoc => traveldoc.number_travel_doc === alldata[indexStore].No)) {
                     const countTravelDoc = await prisma.travelDoc.count({
                         where: {
@@ -254,6 +263,112 @@ class _receive {
             }
         } catch (error) {
             console.error('Destroy receive module Error: ', error);
+            return {
+                status: false,
+                error
+            }
+        }
+    }
+
+    getFile = async () => {
+        try {
+            const list = await prisma.fileMaterialReceive.findMany()
+
+            return {
+                status: true,
+                code: 201,
+                data: list
+            }
+        } catch (error) {
+            console.error('listFile receive module Error: ', error);
+            return {
+                status: false,
+                error
+            }
+        }
+    }
+
+    getMaterialReceive = async (id) => {
+        try {
+            const schema = Joi.number().required()
+
+            const validation = schema.validate(id)
+
+            if (validation.error) {
+                const errorDetails = validation.error.details.map(detail => detail.message)
+
+                return {
+                    status: false,
+                    code: 422,
+                    error: errorDetails.join(', ')
+                }
+            }
+
+            const list = await prisma.materialReceive.findMany({
+                where: {
+                    file_material_id: parseInt(id)
+                },
+                include: {
+                    material: {
+                        include: {
+                            supllier: true
+                        }
+                    },
+                    batch_material: {
+                        include: {
+                            supllier: true
+                        }
+                    },
+                    travel_doc: true
+                }
+            })
+
+            return {
+                status: true,
+                code: 201,
+                data: list
+            }
+        } catch (error) {
+            console.error('listFile receive module Error: ', error);
+            return {
+                status: false,
+                error
+            }
+        }
+    }
+
+    updateMaterialReceive = async (body, id) => {
+        try {
+            console.log(body.weight)
+            const schema = Joi.number().required()
+
+            const validation = schema.validate(body.weight)
+
+            if (validation.error) {
+                const errorDetails = validation.error.details.map(detail => detail.message)
+                return {
+                    status: false,
+                    code: 422,
+                    error: errorDetails.join(', ')
+                }
+            }
+
+            const update = await prisma.materialReceive.update({
+                where: {
+                    id: parseInt(id)
+                },
+                data: {
+                    weight: parseInt(body.weight)
+                }
+            })
+
+            return {
+                status: true,
+                code: 201,
+                data: update
+            }
+        } catch (error) {
+            console.error('listFile receive module Error: ', error);
             return {
                 status: false,
                 error

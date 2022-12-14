@@ -68,14 +68,22 @@ class __seeder {
 
             await prisma.rack.createMany({
                 data: [
-                    { rack_number: "R-HPS11", rack_name: "Rack HPS11", address: "A1.01.01", max_capacity: 1000000, supplier_id: 2 },
-                    { rack_number: "R-MB35", rack_name: "Rack MB35", address: "B1.02.02", max_capacity: 2000000, supplier_id: 2 },
-                    { rack_number: "R-HPS12", rack_name: "Rack HPS12", address: "C1.03.03", max_capacity: 800000, supplier_id: 2 },
-                    { rack_number: "R-MB36", rack_name: "Rack MB36", address: "D1.04.04", max_capacity: 3000000, supplier_id: 2 },
-                    { rack_number: "R-HPS13", rack_name: "Rack HPS13", address: "A1.01.01", max_capacity: 1000, supplier_id: 5 },
-                    { rack_number: "R-MB37", rack_name: "Rack MB37", address: "B1.02.02", max_capacity: 500, supplier_id: 5 },
-                    { rack_number: "R-HPS14", rack_name: "Rack HPS14", address: "A1.01.01", max_capacity: 1000, supplier_id: 5 },
-                    { rack_number: "R-MB38", rack_name: "Rack MB38", address: "B1.02.02", max_capacity: 500, supplier_id: 5 },
+                    { rack_number: "R-HPS11", rack_name: "Rack HPS11", type: "M", address: "A1.01.01", max_capacity: 2000000, supplier_id: 2 },
+                    { rack_number: "R-MB35", rack_name: "Rack MB35", type: "B", address: "B1.02.02", max_capacity: 800000, supplier_id: 2 },
+                    { rack_number: "R-HPS12", rack_name: "Rack HPS12", type: "M",  address: "C1.03.03", max_capacity: 3000000, supplier_id: 2 },
+                    { rack_number: "R-MB36", rack_name: "Rack MB36", type: "B", address: "D1.04.04", max_capacity: 500000, supplier_id: 2 },
+                    { rack_number: "R-HPS13", rack_name: "Rack HPS13", type: "M",  address: "A1.01.01", max_capacity: 1000000, supplier_id: 2 },
+                    { rack_number: "R-MB37", rack_name: "Rack MB37", type: "B", address: "B1.02.02", max_capacity: 500000, supplier_id: 2 },
+                    { rack_number: "R-HPS14", rack_name: "Rack HPS14", type: "M",  address: "A1.01.01", max_capacity: 1000000, supplier_id: 2 },
+                    { rack_number: "R-MB38", rack_name: "Rack MB38", type: "B", address: "B1.02.02", max_capacity: 500000, supplier_id: 2 },
+                    { rack_number: "R-HPS15", rack_name: "Rack HPS15", type: "M", address: "A1.01.01", max_capacity: 1000000, supplier_id: 5 },
+                    { rack_number: "R-MB39", rack_name: "Rack MB39", type: "B", address: "B1.02.02", max_capacity: 2000000, supplier_id: 5 },
+                    { rack_number: "R-HPS16", rack_name: "Rack HPS16", type: "M",  address: "C1.03.03", max_capacity: 800000, supplier_id: 5 },
+                    { rack_number: "R-MB40", rack_name: "Rack MB40", type: "B", address: "D1.04.04", max_capacity: 3000000, supplier_id: 5 },
+                    { rack_number: "R-HPS17", rack_name: "Rack HPS17", type: "M",  address: "A1.01.01", max_capacity: 500000, supplier_id: 5 },
+                    { rack_number: "R-MB41", rack_name: "Rack MB41", type: "B", address: "B1.02.02", max_capacity: 500000, supplier_id: 5 },
+                    { rack_number: "R-HPS18", rack_name: "Rack HPS18", type: "M",  address: "A1.01.01", max_capacity: 500000, supplier_id: 5 },
+                    { rack_number: "R-MB42", rack_name: "Rack MB42", type: "B", address: "B1.02.02", max_capacity: 500000, supplier_id: 5 },
                 ]
             })
 

@@ -96,6 +96,7 @@ model Rack {
   rack_number      String             @unique @db.Char(200)
   rack_name        String             @db.Char(200)
   address          String             @db.Char(200)
+  type             String             @db.VarChar(200)
   max_capacity     Int
   supllier         Supplier           @relation(fields: [supplier_id], references: [id])
   supplier_id      Int
@@ -177,7 +178,7 @@ model PlacementRack {
   id                  Int             @id @default(autoincrement())
   material_receive    MaterialReceive @relation(fields: [material_receive_id], references: [id])
   rack                Rack            @relation(fields: [rack_id], references: [id])
-  material_receive_id Int
+  material_receive_id Int             @unique
   rack_id             Int
   created_at          DateTime        @default(now())
   updated_at          DateTime        @updatedAt

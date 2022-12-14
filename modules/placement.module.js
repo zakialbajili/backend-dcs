@@ -21,7 +21,7 @@ class _placement {
             let materialReceive = await prisma.material.findFirst({
                 where: {
                     MaterialReceive: {
-                        every: {
+                        some: {
                             id: body.id
                         }
                     }
@@ -35,7 +35,7 @@ class _placement {
                 materialReceive = await prisma.batchMaterial.findFirst({
                     where: {
                         MaterialReceive: {
-                            every: {
+                            some: {
                                 id: body.id
                             }
                         }
@@ -51,6 +51,20 @@ class _placement {
                     status: false,
                     code: 401,
                     error: 'Material Receive tidak ditemukan'
+                }
+            }
+
+            const placementStrore = await prisma.placementRack.findFirst({
+                where: {
+                    material_receive_id: body.id
+                }
+            })
+
+            if (placementStrore) {
+                return {
+                    status: false,
+                    code: 402,
+                    error: 'Material Receive sudah tersimpan'
                 }
             }
 
@@ -116,13 +130,69 @@ class _placement {
             // }
 
             //percobaan 2
-            const placement = await prisma.placementRack.findFirst({
-                where: {
-                    OR: [
 
-                    ]
+            //hitung total berat material/batch yang sama dan telah tersimpan
+            const sumWeight = await prisma.materialReceive.aggregate({
+                where: {
+                    PlacementRack: {
+                        some: {
+                            material_receive: {
+                                material_id : materialReceive.MaterialReceive[0].material_id,
+                                batch_material_id: materialReceive.MaterialReceive[0].batch_material_id,
+                            }
+                        }
+                    }
+                },
+                _sum: {
+                    weight: true
+                },
+            })
+
+            //cari rak
+            let placement = await prisma.rack.findFirst({
+                where: {
+                    PlacementRack: {
+                        some: {
+                            material_receive: {
+                                material_id : materialReceive.MaterialReceive[0].material_id,
+                                batch_material_id: materialReceive.MaterialReceive[0].batch_material_id,
+                            }
+                        }
+                    }
                 }
             })
+
+            // if (!placement) {
+            //     placement = await prisma.rack.findFirst({
+            //         where: {
+            //             type: materialReceive.MaterialReceive[0].type,
+            //             supplier_id: materialReceive.supplier_id,
+            //             max_capacity: {
+            //                 gte: materialReceive.MaterialReceive[0].weight
+            //             }
+            //         }
+            //     })
+            // }
+
+            if ((sumWeight._sum + materialReceive.MaterialReceive[0].weight) * 1000 > placement.max_capacity) {
+                placement = await prisma.rack.findFirst({
+                    where: {
+                        where: {
+                            type: materialReceive.MaterialReceive[0].type,
+                            supplier_id: materialReceive.supplier_id,
+                            max_capacity: {
+                                gte: materialReceive.MaterialReceive[0].weight
+                            },
+                        }
+                    }
+                })
+            }
+
+            return {
+                status: true,
+                code: 201,
+                data: placement
+            }
 
         } catch (error) {
             console.error('suggestion Placement module Error:', error);
@@ -171,40 +241,32 @@ class _placement {
                 }
             }
 
-            let materialReceive = await prisma.material.findFirst({
+            let materialReceiveStrore = await prisma.materialReceive.findFirst({
                 where: {
-                    MaterialReceive: {
-                        every: {
-                            id: body.id_materialreceive
-                        }
-                    }
-                },
-                include: {
-                    MaterialReceive: true
+                    id: body.id_materialreceive
                 }
             })
 
-            if (!materialReceive) {
-                materialReceive = await prisma.batchMaterial.findFirst({
-                    where: {
-                        MaterialReceive: {
-                            every: {
-                                id: body.id_materialreceive
-                            }
-                        }
-                    },
-                    include: {
-                        MaterialReceive: true
-                    }
-                })
-            }
-
-            if (!materialReceive) {
+            if (!materialReceiveStrore) {
                 return {
                     status: false,
                     code: 401,
                     error: 'Material Receive tidak ditemukan'
                 }
+            }
+
+            let materalReceive = await prisma.material.findFirst({
+                where: {
+                    id: materialReceiveStrore.material_id
+                }
+            })
+
+            if (!materalReceive) {
+                materalReceive = await prisma.batchMaterial.findFirst({
+                    where: {
+                        id: materialReceiveStrore.batch_material_id
+                    }
+                })
             }
 
             const placements = await prisma.placementRack.findMany({
@@ -217,8 +279,8 @@ class _placement {
                 }
             })
 
-            //cek kesamaan supplier dan apakah rak sudah terisi dengan material receive lain
-            if((materialReceive.supplier_id !== rack.supplier_id) || ((placements.length > 0) && (placements[0].material_receive_id != body.id_materialreceive))) {
+            //cek kesamaan supplier dan apakah rak sudah terisi dengan material/batch material lain
+            if((materalReceive.supplier_id !== rack.supplier_id) || ((placements.length > 0) && (placements[0].material_receive.material_id != materialReceiveStrore.material_id) && (placements[0].material_receive.batch_material_id != materialReceiveStrore.batch_material_id))) {
                 return {
                     status: false,
                     code: 402,
@@ -232,8 +294,9 @@ class _placement {
                 totalCapacity = placements.reduce((acc, placement) => acc + placement.material_receive.weight, 0)
             }
 
+            console.log(totalCapacity)
 
-            if (((totalCapacity + materialReceive.MaterialReceive[0].weight) * 1000) > rack.max_capacity) {
+            if (((totalCapacity + materalReceive.weight) * 1000) > rack.max_capacity) {
                 return {
                     status: false,
                     code: 403,
