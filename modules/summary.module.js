@@ -4,7 +4,6 @@ const listNG = require("../dummy/summaryNG.json")
 const listDPA = require("../dummy/summaryDPA.json")
 const jwt = require('jsonwebtoken')
 const { number } = require("joi")
-const dayjs = require("dayjs")
 
 // dayjs atau date and time
 // $queryRaw

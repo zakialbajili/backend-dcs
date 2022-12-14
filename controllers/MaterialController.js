@@ -1,32 +1,14 @@
-const m$auth = require('../modules/material.module')
-const { Router } = require('express')
-const response = require('../helpers/response')
-const auth = require("../middleware/auth-middleware")
+const m$auth = require('../modules/material.module');
+const { Router } = require('express');
+const response = require('../helpers/response');
+const auth = require('../middleware/auth-middleware');
 
-const MaterialController = Router()
+const MaterialController = Router();
 
-MaterialController.get('/receives', auth, async (req, res) => {
-    const list = await m$auth.listMaterialReceives()
+MaterialController.get('/stocks', auth, async (req, res) => {
+  const list = await m$auth.listMaterial();
 
-    response.sendResponse(res, list)
-})
+  response.sendResponse(res, list);
+});
 
-// SW.C
-MaterialController.get('/stock', auth, async (req, res) => {
-    const list = await m$auth.listMaterialReceives()
-
-    response.sendResponse(res, list)
-})
-
-MaterialController.get('/in', auth, async (req, res) => {
-    const list = await m$auth.listMaterialReceives()
-
-    response.sendResponse(res, list)
-})
-MaterialController.get('/out', auth, async (req, res) => {
-    const list = await m$auth.listMaterialReceives()
-
-    response.sendResponse(res, list)
-})
-
-module.exports = MaterialController
+module.exports = MaterialController;

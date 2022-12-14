@@ -1,26 +1,25 @@
-const m$auth = require('../modules/material.module')
-const { Router } = require('express')
-const response = require('../helpers/response')
-const auth = require("../middleware/auth-middleware")
+const m$auth = require('../modules/materialStock.module');
+const { Router } = require('express');
+const response = require('../helpers/response');
+const auth = require('../middleware/auth-middleware');
 
-const MaterialController = Router()
+const MaterialStockController = Router();
 
-MaterialController.get('/receives', auth, async (req, res) => {
-    const list = await m$auth.listMaterialReceives()
+MaterialStockController.get('/minmax', auth, async (req, res) => {
+  let supplierId = req.query.supplierId;
 
-    response.sendResponse(res, list)
-})
+  const list = await m$auth.listMaterialStock({ supplierId: supplierId });
+
+  response.sendResponse(res, list);
+});
 
 // SW.C
-MaterialController.get('/in', auth, async (req, res) => {
-    const list = await m$auth.listMaterialReceives()
+MaterialStockController.get('/in_out', auth, async (req, res) => {
+  let month = req.query.month;
 
-    response.sendResponse(res, list)
-})
-MaterialController.get('/out', auth, async (req, res) => {
-    const list = await m$auth.listMaterialReceives()
+  const list = await m$auth.listMaterialInOut({ month: month });
 
-    response.sendResponse(res, list)
-})
+  response.sendResponse(res, list);
+});
 
-module.exports = MaterialController
+module.exports = MaterialStockController;
