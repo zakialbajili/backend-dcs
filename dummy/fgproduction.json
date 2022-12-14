@@ -1,0 +1,37 @@
+{
+  "data": [
+    {
+      "created_at": "25/11/2022",
+      "updated_at": "25/11/2022",
+      "order": 220,
+      "stockin": 950,
+      "totalstock": 1170,
+      "id_workorder": 1,
+      "scanned": 10,
+      "stockout": 950,
+      "summaryNG": 30
+    },
+    {
+      "created_at": "25/11/2022",
+      "updated_at": "25/11/2022",
+      "order": 230,
+      "stockin": 950,
+      "totalstock": 1180,
+      "id_workorder": 2,
+      "scanned": 10,
+      "stockout": 950,
+      "summaryNG": 30
+    },
+    {
+      "created_at": "25/11/2022",
+      "updated_at": "25/11/2022",
+      "order": 240,
+      "stockin": 950,
+      "totalstock": 1190,
+      "id_workorder": 3,
+      "scanned": 10,
+      "stockout": 950,
+      "summaryNG": 30
+    }
+  ]
+}
