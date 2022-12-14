@@ -69,7 +69,7 @@ class _receive {
                     return {
                         status: false,
                         code: 404,
-                        error: "data supplier from excel doesn't match with data supplier on database"
+                        error: "data travel doc column " + (indexCheck + 1) + "already exist"
                     }
                 }
 
@@ -79,7 +79,7 @@ class _receive {
                     return {
                         status: false,
                         code: 404,
-                        error: "data supplier from excel doesn't match with data supplier on database"
+                        error: "data supplier column " + (indexCheck + 1) + " not found on database"
                     }
                 }
 
@@ -88,7 +88,7 @@ class _receive {
                     return {
                         status: false,
                         code: 404,
-                        error: "data material from excel doesn't match with data material on database"
+                        error: "data material column " + (indexCheck + 1) + " not found on database"
                     }
                 }
 
@@ -97,7 +97,7 @@ class _receive {
                     return {
                         status: false,
                         code: 404,
-                        error: "data batchmaterial from excel doesn't match with data batchmaterial on database"
+                        error: "data batchmaterial column " + (indexCheck + 1) + " not found on database"
                     }
                 }
 

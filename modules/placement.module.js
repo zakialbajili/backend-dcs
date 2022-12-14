@@ -50,7 +50,7 @@ class _placement {
                 return {
                     status: false,
                     code: 401,
-                    error: 'Material Receive tidak ditemukan'
+                    error: 'Material Receive not found'
                 }
             }
 
@@ -64,7 +64,42 @@ class _placement {
                 return {
                     status: false,
                     code: 402,
-                    error: 'Material Receive sudah tersimpan'
+                    error: 'Material Receive alreasy saved'
+                }
+            }
+
+            let supplier 
+            if (materialReceive.MaterialReceive[0].material_id == null) {
+                supplier = await prisma.rack.findFirst({
+                    where: {
+                        supllier: {
+                            BatchMaterial: {
+                                some: {
+                                    id: materialReceive.MaterialReceive[0].batch_material_id
+                                }   
+                            }
+                        }
+                    }
+                })
+            } else {
+                supplier = await prisma.rack.findFirst({
+                    where: {
+                        supllier: {
+                            Material: {
+                                some: {
+                                    id: materialReceive.MaterialReceive[0].material_id
+                                }
+                            },
+                        }
+                    }
+                })
+            }
+
+            if (!supplier) {
+                return {
+                    status: false,
+                    code: 403,
+                    error: "Data Supplier doesn't on rack"
                 }
             }
 
@@ -132,6 +167,8 @@ class _placement {
             //percobaan 2
 
             //hitung total berat material/batch yang sama dan telah tersimpan
+            
+            //percobaan 2
             const sumWeight = await prisma.materialReceive.aggregate({
                 where: {
                     PlacementRack: {
@@ -162,28 +199,35 @@ class _placement {
                 }
             })
 
-            // if (!placement) {
-            //     placement = await prisma.rack.findFirst({
-            //         where: {
-            //             type: materialReceive.MaterialReceive[0].type,
-            //             supplier_id: materialReceive.supplier_id,
-            //             max_capacity: {
-            //                 gte: materialReceive.MaterialReceive[0].weight
-            //             }
-            //         }
-            //     })
-            // }
-
-            if ((sumWeight._sum + materialReceive.MaterialReceive[0].weight) * 1000 > placement.max_capacity) {
+            if (!placement) {
                 placement = await prisma.rack.findFirst({
                     where: {
-                        where: {
-                            type: materialReceive.MaterialReceive[0].type,
-                            supplier_id: materialReceive.supplier_id,
-                            max_capacity: {
-                                gte: materialReceive.MaterialReceive[0].weight
+                        type: materialReceive.MaterialReceive[0].type,
+                        supplier_id: materialReceive.supplier_id,
+                        max_capacity: {
+                            gte: materialReceive.MaterialReceive[0].weight * 1000
+                        },
+                    }
+                })
+            }
+            
+            if ((sumWeight._sum.weight + materialReceive.MaterialReceive[0].weight) * 1000 > placement.max_capacity) {
+                placement = await prisma.rack.findFirst({
+                    where: {
+                        AND: [
+                            {
+                                type: materialReceive.MaterialReceive[0].type,
+                                supplier_id: materialReceive.supplier_id,
+                                max_capacity: {
+                                    gte: materialReceive.MaterialReceive[0].weight * 1000
+                                },
                             },
-                        }
+                            {
+                                NOT: {
+                                    id: placement.id
+                                }
+                            }
+                        ]
                     }
                 })
             }
@@ -225,11 +269,6 @@ class _placement {
             const rack = await prisma.rack.findFirst({
                 where: {
                     rack_number: body.rack_number
-                },
-                select: {
-                    id: true,
-                    max_capacity: true,
-                    supplier_id: true
                 }
             })
 
@@ -255,18 +294,35 @@ class _placement {
                 }
             }
 
-            let materalReceive = await prisma.material.findFirst({
-                where: {
-                    id: materialReceiveStrore.material_id
-                }
-            })
-
-            if (!materalReceive) {
+            let materalReceive
+            if (materialReceiveStrore.material_id == null) {
                 materalReceive = await prisma.batchMaterial.findFirst({
                     where: {
                         id: materialReceiveStrore.batch_material_id
                     }
                 })
+            } else {
+                materalReceive = await prisma.material.findFirst({
+                    where: {
+                        id: materialReceiveStrore.material_id
+                    }
+                })
+            }
+
+            if (materalReceive.supplier_id !== rack.supplier_id) {
+                return {
+                    status: false,
+                    code: 402,
+                    error: "Supplier doesn't match"
+                }
+            }
+
+            if (materialReceiveStrore.type !== rack.type) {
+                return {
+                    status: false,
+                    code: 402,
+                    error: "Type doesn't match"
+                }
             }
 
             const placements = await prisma.placementRack.findMany({
@@ -279,12 +335,11 @@ class _placement {
                 }
             })
 
-            //cek kesamaan supplier dan apakah rak sudah terisi dengan material/batch material lain
-            if((materalReceive.supplier_id !== rack.supplier_id) || ((placements.length > 0) && (placements[0].material_receive.material_id != materialReceiveStrore.material_id) && (placements[0].material_receive.batch_material_id != materialReceiveStrore.batch_material_id))) {
+            if(((placements.length > 0) && (placements[0].material_receive.material_id != materialReceiveStrore.material_id) && (placements[0].material_receive.batch_material_id != materialReceiveStrore.batch_material_id))) {
                 return {
                     status: false,
                     code: 402,
-                    error: 'Rack tidak dapat digunakan'
+                    error: 'Rack already used'
                 }
             }
 
@@ -294,13 +349,11 @@ class _placement {
                 totalCapacity = placements.reduce((acc, placement) => acc + placement.material_receive.weight, 0)
             }
 
-            console.log(totalCapacity)
-
-            if (((totalCapacity + materalReceive.weight) * 1000) > rack.max_capacity) {
+            if (((totalCapacity + materialReceiveStrore.weight) * 1000) > rack.max_capacity) {
                 return {
                     status: false,
                     code: 403,
-                    error: 'Kapasitas rack tidak cukup'
+                    error: 'Rack is full'
                 }
             }
 
