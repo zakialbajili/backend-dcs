@@ -1,0 +1,44 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "day" : "Monday",
+            "qty_in" : 40,
+            "qty_out" : 19,
+            "created_at" : "5 Desember 2022",
+            "updated_at" : "5 Desember 2022"
+        },
+        {
+            "id": 2,
+            "day" : "Tuesday",
+            "qty_in" : 60,
+            "qty_out" : 40,
+            "created_at" : "5 Desember 2022",
+            "updated_at" : "5 Desember 2022"
+        },
+        {
+            "id": 3,
+            "day" : "Wednesday",
+            "qty_in" : 60,
+            "qty_out" : 60,
+            "created_at" : "5 Desember 2022",
+            "updated_at" : "5 Desember 2022"
+        },
+        {
+            "id": 4,
+            "day" : "Thursday",
+            "qty_in" : 60,
+            "qty_out" : 40,
+            "created_at" : "5 Desember 2022",
+            "updated_at" : "5 Desember 2022"
+        },
+        {
+            "id": 5,
+            "day" : "Friday",
+            "qty_in" : 80,
+            "qty_out" : 40,
+            "created_at" : "5 Desember 2022",
+            "updated_at" : "5 Desember 2022"
+        }
+    ]
+}

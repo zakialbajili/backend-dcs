@@ -1,26 +1,33 @@
-const m$auth = require('../modules/material.module')
+const m$auth = require('../modules/FGstockOpname.module')
 const { Router } = require('express')
 const response = require('../helpers/response')
 const auth = require("../middleware/auth-middleware")
 
-const MaterialController = Router()
+const FGStockOpnameController = Router()
 
-MaterialController.get('/receives', auth, async (req, res) => {
-    const list = await m$auth.listMaterialReceives()
+FGStockOpnameController.get('/detail', auth, async (req, res) => {
+    let partId = req.query.partId
+    let month = req.query.month
+
+    const list = await m$auth.listFGstockOpname({ partId: partId, month: month})
 
     response.sendResponse(res, list)
 })
 
 // SW.C
-MaterialController.get('/in', auth, async (req, res) => {
-    const list = await m$auth.listMaterialReceives()
+FGStockOpnameController.get('/inout', auth, async (req, res) => {
+    let month = req.query.month
+
+    const list = await m$auth.listFGInOut({month: month})
 
     response.sendResponse(res, list)
 })
-MaterialController.get('/out', auth, async (req, res) => {
-    const list = await m$auth.listMaterialReceives()
+FGStockOpnameController.get('/chart', auth, async (req, res) => {
+    let month = req.query.month
+
+    const list = await m$auth.listChartStock({month: month})
 
     response.sendResponse(res, list)
 })
 
-module.exports = MaterialController
+module.exports = FGStockOpnameController
