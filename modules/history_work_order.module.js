@@ -186,7 +186,8 @@ class _wo {
                     error: errorDetails.join(', ')
                 }
             }
-            const dlt =  prisma.workOrderDetail.deleteMany({
+            let data=[]
+            const dlt = await prisma.workOrderDetail.deleteMany({
                 where:{
                     work_order_id: req.id
                 }
@@ -210,8 +211,8 @@ class _wo {
                     total_box:req.total_order/wo.quantity_perbox
                 }
             })
-            const updateWo=await m$wodetail.updateWoDetail(wo)
-            console.log(updateWo)
+            data.push(update)
+            const updateWo=await m$wodetail.woDetail(data)
             return{
                 status:true,
                 data:update
