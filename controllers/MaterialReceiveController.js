@@ -12,6 +12,12 @@ MaterialReceiveController.post('/upload', [upload.single("file"), authorization]
     response.sendResponse(res, upload)
 })
 
+MaterialReceiveController.get('/amount', authorization, async (req, res) => {
+    const amount = await m$receive.amount()
+
+    response.sendResponse(res, amount)
+})
+
 MaterialReceiveController.get('/', authorization, async (req, res) => {
     const list = await m$receive.getFile()
 

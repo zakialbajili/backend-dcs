@@ -64,49 +64,14 @@ class _placement {
                 return {
                     status: false,
                     code: 402,
-                    error: 'Material Receive alreasy saved'
-                }
-            }
-
-            let supplier 
-            if (materialReceive.MaterialReceive[0].material_id == null) {
-                supplier = await prisma.rack.findFirst({
-                    where: {
-                        supllier: {
-                            BatchMaterial: {
-                                some: {
-                                    id: materialReceive.MaterialReceive[0].batch_material_id
-                                }   
-                            }
-                        }
-                    }
-                })
-            } else {
-                supplier = await prisma.rack.findFirst({
-                    where: {
-                        supllier: {
-                            Material: {
-                                some: {
-                                    id: materialReceive.MaterialReceive[0].material_id
-                                }
-                            },
-                        }
-                    }
-                })
-            }
-
-            if (!supplier) {
-                return {
-                    status: false,
-                    code: 403,
-                    error: "Data Supplier doesn't on rack"
+                    error: 'Material Receive already saved'
                 }
             }
 
             // percobaan 1
             // const placement = await prisma.rack.findMany({
             //     where: {
-            //         supplier_id: materialReceive.supplier_id
+            //         type: materialReceive.MaterialReceive[0].type
             //     },
             //     include: {
             //         PlacementRack: {
@@ -117,14 +82,6 @@ class _placement {
             //     }
             // })
 
-            // if (placement.length == 0) {
-            //     return {
-            //         status: false,
-            //         code: 402,
-            //         error: 'Rack tidak tersedia'
-            //     }
-            // }
-
             // const terisi = placement.filter((i) => 
             //     i.PlacementRack.length > 0
             // )
@@ -133,6 +90,7 @@ class _placement {
             //     i.PlacementRack.length == 0
             // )
 
+            // cari rak yang telah menyimpan material yang sama dan kapasistasnya masih cukup
             // let rack = terisi.find((i) => {
             //     if (
             //         (i.PlacementRack[0].material_receive.material_id === materialReceive.MaterialReceive[0].material_id) &&
@@ -144,6 +102,7 @@ class _placement {
             //     }
             // })
 
+            // cari rak yang kosong
             // if (!rack) {
             //     rack = kosong.find((i) => i.max_capacity > materialReceive.MaterialReceive[0].weight * 1000)
             // }
@@ -163,12 +122,11 @@ class _placement {
             //     code: 201,
             //     data: [materialReceive, rack]
             // }
+            // end percobaan 1
 
-            //percobaan 2
 
-            //hitung total berat material/batch yang sama dan telah tersimpan
-            
-            //percobaan 2
+            // percobaan 2
+            // menghitung jumlah berat dari material yang sama dan telah disimpan
             const sumWeight = await prisma.materialReceive.aggregate({
                 where: {
                     PlacementRack: {
@@ -185,7 +143,7 @@ class _placement {
                 },
             })
 
-            //cari rak
+            //cari rak yang menyimpan material yang sama
             let placement = await prisma.rack.findFirst({
                 where: {
                     PlacementRack: {
@@ -200,42 +158,48 @@ class _placement {
             })
 
             if (!placement) {
+                //cari rak yang masih kosong (belum menyimpan material lain)
                 placement = await prisma.rack.findFirst({
                     where: {
                         type: materialReceive.MaterialReceive[0].type,
-                        supplier_id: materialReceive.supplier_id,
                         max_capacity: {
                             gte: materialReceive.MaterialReceive[0].weight * 1000
                         },
+                        PlacementRack: {
+                            none: {}
+                        }
                     }
                 })
             }
             
+            // jika material sudah pernah disimpan
+            // cek apakah rak masih bisa menampung material
             if ((sumWeight._sum.weight + materialReceive.MaterialReceive[0].weight) * 1000 > placement.max_capacity) {
                 placement = await prisma.rack.findFirst({
                     where: {
-                        AND: [
-                            {
-                                type: materialReceive.MaterialReceive[0].type,
-                                supplier_id: materialReceive.supplier_id,
-                                max_capacity: {
-                                    gte: materialReceive.MaterialReceive[0].weight * 1000
-                                },
-                            },
-                            {
-                                NOT: {
-                                    id: placement.id
-                                }
-                            }
-                        ]
+                        id: {
+                            not: placement.id
+                        },
+                        type: materialReceive.MaterialReceive[0].type,
+                        max_capacity: {
+                            gte: materialReceive.MaterialReceive[0].weight * 1000
+                        }
                     }
                 })
+            }
+
+            if (!placement) {
+                return {
+                    status: false,
+                    code: 404,
+                    error: "All Rack isn't available"
+                }
             }
 
             return {
                 status: true,
                 code: 201,
-                data: placement
+                data: [placement, materialReceive]
             }
 
         } catch (error) {
@@ -276,48 +240,25 @@ class _placement {
                 return {
                     status: false,
                     code: 402,
-                    error: 'Rack tidak ditemukan'
+                    error: 'Rack not found'
                 }
             }
 
-            let materialReceiveStrore = await prisma.materialReceive.findFirst({
+            let materialReceive = await prisma.materialReceive.findFirst({
                 where: {
                     id: body.id_materialreceive
                 }
             })
 
-            if (!materialReceiveStrore) {
+            if (!materialReceive) {
                 return {
                     status: false,
                     code: 401,
-                    error: 'Material Receive tidak ditemukan'
+                    error: 'Material Receive not found'
                 }
             }
 
-            let materalReceive
-            if (materialReceiveStrore.material_id == null) {
-                materalReceive = await prisma.batchMaterial.findFirst({
-                    where: {
-                        id: materialReceiveStrore.batch_material_id
-                    }
-                })
-            } else {
-                materalReceive = await prisma.material.findFirst({
-                    where: {
-                        id: materialReceiveStrore.material_id
-                    }
-                })
-            }
-
-            if (materalReceive.supplier_id !== rack.supplier_id) {
-                return {
-                    status: false,
-                    code: 402,
-                    error: "Supplier doesn't match"
-                }
-            }
-
-            if (materialReceiveStrore.type !== rack.type) {
+            if (materialReceive.type !== rack.type) {
                 return {
                     status: false,
                     code: 402,
@@ -325,50 +266,97 @@ class _placement {
                 }
             }
 
-            const placements = await prisma.placementRack.findMany({
+            // percobaan 1
+            // const placements = await prisma.placementRack.findMany({
+            //     where: {
+            //         rack_id: rack.id
+            //     },
+            //     select: {
+            //         material_receive_id: true,
+            //         material_receive: true
+            //     }
+            // })
+
+            // // cek apakah rak sudah diisi dengan material lain
+            // if((placements.length > 0) && ((placements[0].material_receive.material_id !== materialReceive.material_id) || (placements[0].material_receive.batch_material_id !== materialReceive.batch_material_id))) {
+            //     return {
+            //         status: false,
+            //         code: 402,
+            //         error: 'Rack already used'
+            //     }
+            // }
+
+            // let totalCapacity = 0
+
+            // // cek apakah kapitas masih bisa menampung
+            // if (placements.length > 0) {
+            //     totalCapacity = placements.reduce((acc, placement) => acc + placement.material_receive.weight, 0)
+            // }
+
+            // if (((totalCapacity + materialReceive.weight) * 1000) > rack.max_capacity) {
+            //     return {
+            //         status: false,
+            //         code: 403,
+            //         error: 'Rack is full'
+            //     }
+            // }
+            // end percobaan 1
+
+
+            // percobaan 2
+            // menghitung jumlah berat dari material yang sama dan telah disimpan
+            const sumWeight = await prisma.materialReceive.aggregate({
                 where: {
-                    rack_id: rack.id
+                    PlacementRack: {
+                        some: {
+                            material_receive: {
+                                material_id : materialReceive.material_id,
+                                batch_material_id: materialReceive.batch_material_id,
+                            }
+                        }
+                    }
                 },
-                select: {
-                    material_receive_id: true,
+                _sum: {
+                    weight: true
+                },
+            })
+
+            if (!sumWeight._sum.weight) {
+                sumWeight._sum.weight = 0
+            }
+
+            // mencari apakah rack sudah pernah terisi
+            const placement = await prisma.placementRack.findFirst({
+                where: {
+                    rack_id: rack.id,
+                },
+                include: {
                     material_receive: true
                 }
             })
 
-            if(((placements.length > 0) && (placements[0].material_receive.material_id != materialReceiveStrore.material_id) && (placements[0].material_receive.batch_material_id != materialReceiveStrore.batch_material_id))) {
+            // cek kesamaan isi rak dengan data input
+            if (placement && (placement.material_receive.material_id != materialReceive.material_id || placement.material_receive.batch_material_id != materialReceive.batch_material_id)) {
                 return {
                     status: false,
                     code: 402,
-                    error: 'Rack already used'
+                    error: "Rack already used"
                 }
             }
 
-            let totalCapacity = 0
-
-            if (placements.length > 0) {
-                totalCapacity = placements.reduce((acc, placement) => acc + placement.material_receive.weight, 0)
-            }
-
-            if (((totalCapacity + materialReceiveStrore.weight) * 1000) > rack.max_capacity) {
+            if (((sumWeight._sum.weight + materialReceive.weight) * 1000) > rack.max_capacity) {
                 return {
                     status: false,
                     code: 403,
                     error: 'Rack is full'
                 }
             }
+            // end percobaan 2
 
             const add = await prisma.placementRack.create({
                 data: {
-                    material_receive: {
-                        connect: {
-                            id: body.id_materialreceive
-                        }
-                    },
-                    rack: {
-                        connect: {
-                            id: rack.id
-                        }
-                    }
+                    material_receive_id: body.id_materialreceive,
+                    rack_id: rack.id
                 }
             })
 

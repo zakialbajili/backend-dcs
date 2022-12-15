@@ -235,31 +235,63 @@ class _receive {
                 }
             }
 
-            const destroymaterial = await prisma.materialReceive.deleteMany({
+            const placement = await prisma.placementRack.findFirst({
                 where: {
-                    file_material_id: parseInt(id)
-                },
-            })
-
-            const deleteTravelDoc = await prisma.travelDoc.deleteMany({
-                where: {
-                    file_material_id: parseInt(id)
-                },
-            })
-
-            const destroyfile = await prisma.fileMaterialReceive.delete({
-                where: {
-                    id: parseInt(id)
+                    material_receive_id: parseInt(id)
                 }
             })
 
-            fs.unlinkSync(destroyfile.file_path)
+            if(placement) {
+                return {
+                    status: false,
+                    code: 402,
+                    error: "Can't delete material"
+                }
+            }
+
+            const destroymaterial = await prisma.materialReceive.delete({
+                where: {
+                    id: parseInt(id),
+                },
+            })
+
+            const traveldoc = await prisma.travelDoc.findFirst({
+                where: {
+                    MaterialReceive: {
+                        none: {}
+                    }
+                }
+            })
+
+            if (traveldoc) {
+                await prisma.travelDoc.delete({
+                    where: {
+                        id: traveldoc.id
+                    }
+                })
+            }
+
+            const file = await prisma.fileMaterialReceive.findFirst({
+                where: {
+                    MaterialReceive:{
+                        none: {}
+                    }
+                }
+            })
+
+            if (file) {
+                await prisma.fileMaterialReceive.delete({
+                    where: {
+                        id: file.id
+                    }
+                })
+                fs.unlinkSync(file.file_path)
+            }
 
             return {
                 status: true,
                 code: 201,
-                data: [destroyfile, deleteTravelDoc, destroymaterial],
-                message: 'File berhasil dihapus'
+                data: destroymaterial,
             }
         } catch (error) {
             console.error('Destroy receive module Error: ', error);
@@ -369,6 +401,24 @@ class _receive {
             }
         } catch (error) {
             console.error('listFile receive module Error: ', error);
+            return {
+                status: false,
+                error
+            }
+        }
+    }
+
+    amount = async () => {
+        try {
+            const amount = await prisma.materialReceive.count()
+
+            return {
+                status: true,
+                code: 201,
+                data: amount
+            }
+        } catch (error) {
+            console.error('amount material receive module Error: ', error);
             return {
                 status: false,
                 error
