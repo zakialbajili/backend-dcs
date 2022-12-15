@@ -11,14 +11,14 @@ datasource db {
 }
 
 model AuthUser {
-  id              Int               @id @default(autoincrement())
-  nisp            String            @unique @db.VarChar(25)
-  password        String?
-  created_at      DateTime          @default(now())
-  updated_at      DateTime          @updatedAt
-  AuthUserRole    AuthUserRole[]
-  TravelDoc       TravelDoc[]
-  FileWorkOrder   FileWorkOrder[]
+  id            Int             @id @default(autoincrement())
+  nisp          String          @unique @db.VarChar(25)
+  password      String?
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+  AuthUserRole  AuthUserRole[]
+  TravelDoc     TravelDoc[]
+  FileWorkOrder FileWorkOrder[]
 
   @@map("auth_users")
 }
@@ -212,6 +212,7 @@ model work_order {
   id_file            Int
   no_work_order      String             @db.Char(200)
   part_name          String             @db.Char(200)
+  part_number        String             @db.Char(200)
   customer           String             @db.Char(200)
   prod_date          DateTime           @default(now())
   quantity_perbox    Int
@@ -260,7 +261,7 @@ model WorkOrderDetail {
   work_order        work_order        @relation(fields: [work_order_id], references: [id])
   work_order_id     Int
   quantity          Int
-  quantity_ng       Int @default(0)
+  quantity_ng       Int               @default(0)
   confirmation      Int               @default(0)
   confirmation_user Int               @default(0)
   created_at        DateTime          @default(now())

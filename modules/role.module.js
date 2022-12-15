@@ -19,7 +19,6 @@ class _role {
             }
         }
     }
-
     createRole = async (body) => {
         try {
             const schema = Joi.object({
