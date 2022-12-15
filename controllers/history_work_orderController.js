@@ -13,7 +13,13 @@ hwoController.get('/list_wo', userSession, async (req, res) => {
     const data = await m$hwo.listwo()
      response.sendResponse(res, data)
  })
-
+ hwoController.put('/update_wo', userSession, async (req, res) => {
+    const data = await m$hwo.updatewo({
+        id:req.body.id,
+        total_order: req.body.total_order
+    })
+     response.sendResponse(res, data)
+ })
 hwoController.post('/', userSession, uploadFile.single('file'), async (req, res) => {
 
     const data = await m$hwo.upload_wo(req.file)

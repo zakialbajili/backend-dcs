@@ -42,6 +42,7 @@ class _wo {
             let addWo
             for (let i = 0; i< worksheets.Sheet1.length; i++){
                 //console.log(worksheets.Sheet1)
+                let part_number=worksheets.Sheet1[i].part_number
                 let part_name=worksheets.Sheet1[i].part_name
                 let no_work_order=worksheets.Sheet1[i].no_work_order
                 let customer=worksheets.Sheet1[i].customer
@@ -81,7 +82,8 @@ class _wo {
                         quantity_perbox: quantity_perbox,
                         total_order: total_order,
                         total_box: total_box,
-                        supplier_id: supplier.id
+                        supplier_id: supplier.id,
+                        part_number:part_number
                      }
                 })
                 data.push(addWo)
@@ -167,6 +169,61 @@ class _wo {
                 }
             }
         }
+    updatewo= async(req)=>{
+        try{
+            const schema = Joi.object({
+                id: Joi.number().required(),
+                total_order: Joi.number().required()
+            }).options({ abortEarly: false })
+
+            const validation = schema.validate(req)
+            if (validation.error) {
+                const errorDetails = validation.error.details.map(detail => detail.message)
+
+                return {
+                    status: false,
+                    code: 422,
+                    error: errorDetails.join(', ')
+                }
+            }
+            const dlt =  prisma.workOrderDetail.deleteMany({
+                where:{
+                    work_order_id: req.id
+                }
+            })
+            const wo= await prisma.work_order.findFirst({
+                where:{
+                    id:req.id
+                },
+                select:{
+                    id: true,
+                    quantity_perbox: true,
+                    total_box: true
+                }
+            })
+            const update = await prisma.work_order.update({
+                where:{
+                    id:req.id
+                },
+                data:{
+                    total_order:req.total_order,
+                    total_box:req.total_order/wo.quantity_perbox
+                }
+            })
+            const updateWo=await m$wodetail.updateWoDetail(wo)
+            console.log(updateWo)
+            return{
+                status:true,
+                data:update
+            }
+        }catch(error){
+            console.log("updateWO hwo module error", error)
+            return{
+                status: false,
+                error:error.message
+            }
+        }
+    }
         
     deletehwo = async (id) => {
             try {
