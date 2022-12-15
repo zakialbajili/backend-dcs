@@ -74,26 +74,27 @@ class wodetail{
 
     listwobyid=async(id) =>{
         try{
-            const list = await prisma.workOrderDetail.findFirst({
+            const list = await prisma.work_order.findFirst({
                 where: {
                     id: parseInt(id)
                 },
                 select:{
-                    id: true,
-                    quantity: true,
-                    quantity_ng: true,
-                    work_order:{
+                    id:true,
+                    part_number: true,
+                    part_name: true,
+                    no_work_order: true,
+                    quantity_perbox:true,
+                    prod_date:true,
+                    WorkOrderDetail:{
                         select:{
-                            id:true,
-                            part_name: true,
-                            no_work_order: true,
-                            quantity_perbox:true,
-                            prod_date:true,
-                            supplier:{
-                                select:{
-                                    name:true
-                                }
-                            }
+                            id: true,
+                            quantity: true,
+                            quantity_ng: true,
+                        }
+                    },
+                    supplier:{
+                        select:{
+                            name:true
                         }
                     }
                 }
