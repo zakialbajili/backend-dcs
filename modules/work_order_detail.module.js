@@ -71,5 +71,79 @@ class wodetail{
             }
         }
     }
+
+    listwobyid=async(id) =>{
+        try{
+            const list = await prisma.workOrderDetail.findFirst({
+                where: {
+                    id: parseInt(id)
+                },
+                select:{
+                    id: true,
+                    quantity: true,
+                    quantity_ng: true,
+                    work_order:{
+                        select:{
+                            id:true,
+                            part_name: true,
+                            no_work_order: true,
+                            quantity_perbox:true,
+                            prod_date:true,
+                            supplier:{
+                                select:{
+                                    name:true
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            return {
+                status: true,
+                code: 200,
+                data: list
+            }
+        }catch(error){
+            console.error('woDetail working order detail module Error: ', error)
+            return{
+                status: false,
+                code:400,
+
+            }
+        }
+    }
+
+    updateWoDetail=async (data)=>{
+        try{
+            let inputwodetail
+                for(let index=0; index<data.total_box; index++){
+                    //console.log(i)                        
+                    console.log(data.id)                        
+                    console.log(data.total_box)                        
+                    console.log(data.quantity_perbox)
+                    inputwodetail = await prisma.workOrderDetail.createMany({
+                        data: {
+                            work_order_id: data.id,
+                            quantity:data.quantity_perbox,
+                            quantity_ng: 0,
+                        }
+                    })
+                    console.log(inputwodetail)
+                }
+            return {
+                status: true,
+                code: 201,
+                data: inputwodetail
+            }
+        }catch(error){
+            console.error('woDetail working order detail module Error: ', error)
+            return{
+                status: false,
+                code:400,
+
+            }
+        }
+    }
 }
 module.exports= new wodetail()

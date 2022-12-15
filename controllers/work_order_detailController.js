@@ -9,4 +9,9 @@ wodController.get('/', userSession, async (req, res) => {
     response.sendResponse(res, data)
 })
 
+wodController.get('/:id', userSession, async (req, res) => {
+    const data = await m$wod.listwobyid(req.params.id)
+     response.sendResponse(res, data)
+ })
+
 module.exports = wodController

@@ -41,7 +41,7 @@ class _wo {
             var data=[]
             let addWo
             for (let i = 0; i< worksheets.Sheet1.length; i++){
-                //console.log(worksheets.Sheet1)
+                console.log(worksheets.Sheet1)
                 let part_number=worksheets.Sheet1[i].part_number
                 let part_name=worksheets.Sheet1[i].part_name
                 let no_work_order=worksheets.Sheet1[i].no_work_order
@@ -58,7 +58,7 @@ class _wo {
                         id:true
                     }
                 })
-                let supplier = await prisma.supplier.findFirst({
+                let supplier = await prisma.Supplier.findFirst({
                     where: {
                         name: supplier_id
                     },
