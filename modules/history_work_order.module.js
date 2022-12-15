@@ -124,25 +124,12 @@ class _wo {
     }
     listwo=async (req)=>{
         try{
-            const list = await prisma.history_work_order.findMany({
+            console.log(req)
+            const list = await prisma.work_order.findMany({
                 where:{
-                    id_file:parseInt(req)
+                    id_file:req
                 },
-                select:{
-                    id: true,
-                    name_file: true,
-                    part_name: true,
-                    no_work_order:true,
-                    customer:true,
-                    quantity_perbox: true,
-                    total_order: true,
-                    total_box: true,
-                    supplier: {
-                        select: {
-                            name: true
-                        }
-                    }
-                }
+
             })
             return {
                 status: true,

@@ -10,7 +10,7 @@ hwoController.get('/', userSession, async (req, res) => {
     response.sendResponse(res, data)
 })
 hwoController.get('/list_wo/:id', userSession, async (req, res) => {
-    const data = await m$hwo.listwo(req.params.id)
+    const data = await m$hwo.listwo(Number(req.params.id))
      response.sendResponse(res, data)
  })
  hwoController.put('/update_wo', userSession, async (req, res) => {
