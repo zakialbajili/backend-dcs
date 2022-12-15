@@ -9,8 +9,8 @@ hwoController.get('/', userSession, async (req, res) => {
    const data = await m$hwo.gethwo()
     response.sendResponse(res, data)
 })
-hwoController.get('/list_wo', userSession, async (req, res) => {
-    const data = await m$hwo.listwo()
+hwoController.get('/list_wo/:id', userSession, async (req, res) => {
+    const data = await m$hwo.listwo(req.params.id)
      response.sendResponse(res, data)
  })
  hwoController.put('/update_wo', userSession, async (req, res) => {

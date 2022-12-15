@@ -122,11 +122,15 @@ class _wo {
             }
         }
     }
-    listwo=async ()=>{
+    listwo=async (req)=>{
         try{
-            const list = await prisma.work_order.findMany({
+            const list = await prisma.history_work_order.findMany({
+                where:{
+                    id_file:parseInt(req)
+                },
                 select:{
                     id: true,
+                    name_file: true,
                     part_name: true,
                     no_work_order:true,
                     customer:true,
