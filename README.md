@@ -8,7 +8,13 @@
 6. Run npx prisma generate
 7. Run npm run dev (make sure run well)
 
-## Documentation POST
+## Things to Remember
+```
+    git pull before you start edit something
+    git pull before you push something
+```
+
+## Documentation POSTMAN
 1. [SW-A](https://documenter.getpostman.com/view/17268867/2s8YzXuf5J)
 2. [SW-B](https://documenter.getpostman.com/view/24013047/2s8YzXuevc)
 3. [SW-C]()
