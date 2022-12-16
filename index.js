@@ -1,4 +1,5 @@
 const express = require('express')
+const FileUpload = require('express-fileupload')
 const cors = require('cors')
 const routes = require('./routes')
 
@@ -8,6 +9,7 @@ const port = 8000
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(FileUpload())
 
 routes(app)
 

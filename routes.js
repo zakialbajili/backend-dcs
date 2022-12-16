@@ -8,6 +8,8 @@ const SuplierController = require("./controllers/SuplierController")
 const BatchController = require("./controllers/BatchMaterialController")
 const SeederController = require("./controllers/SeederController")
 const PlacementController = require("./controllers/PlacementController")
+const hwoController = require("./controllers/history_work_orderController")
+const supplierController = require("./controllers/SupplierController")
 
 const _routes = [
     ['users', UserController],
@@ -20,6 +22,8 @@ const _routes = [
     ['seeder', SeederController],
     ['', AuthUserController],
     ['sup', SuplierController]
+    ['history_work_order', hwoController],
+    ['supplier', supplierController]
 ]
 
 const routes = (app) => {
