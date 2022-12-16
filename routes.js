@@ -26,19 +26,19 @@ const _routes = [
     ['placement', PlacementController],
     ['seeder', SeederController],
     ['', AuthUserController],
-    ['sup', SuplierController]
+    ['sup', SuplierController],
     ['history_work_order', hwoController],
-    ['supplier', supplierController]
+    ['supplier', supplierController],
+    ['material', MaterialController],
+    ['summary', SummaryController],
+    ['production', FGproductionController],
+    ['fg/stock', FGStockOpnameController],
+    ['mStocks', MaterialStockController],
 ]
-  ['material', MaterialController],
-  ['summary', SummaryController],
-  ['production', FGproductionController],
-  ['fg/stock', FGStockOpnameController],
-  ['mStocks', MaterialStockController],
 
 const routes = (app) => {
-  _routes.forEach((route) => {
-    const [url, controller] = route;
+  _routes.forEach(route => {
+        const [url, controller] = route;
 
         // http://localhost:8080/api
         app.use(`/api/${url}`, controller)
