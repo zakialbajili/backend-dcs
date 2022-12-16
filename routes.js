@@ -9,6 +9,7 @@ const BatchController = require("./controllers/BatchMaterialController")
 const SeederController = require("./controllers/SeederController")
 const PlacementController = require("./controllers/PlacementController")
 const hwoController = require("./controllers/history_work_orderController")
+const wodController = require("./controllers/work_order_detailController")
 const supplierController = require("./controllers/SupplierController")
 const MaterialController = require('./controllers/MaterialController');
 const SummaryController = require('./controllers/SummaryController');
@@ -34,6 +35,7 @@ const _routes = [
     ['production', FGproductionController],
     ['fg/stock', FGStockOpnameController],
     ['mStocks', MaterialStockController],
+    ['work_order_detail', wodController],
 ]
 
 const routes = (app) => {

@@ -21,7 +21,7 @@ class _supplier {
                     error: errorDetails.join(', ')
                 }
             }
-            const add = await prisma.suppliers.create({
+            const add = await prisma.Supplier.create({
                 data: {
                     name: body.name,
                     email: body.email,
