@@ -65,11 +65,12 @@ class _receive {
 
             while (indexCheck < alldata.length) {
                 if (travelDoc.length !== 0 && travelDoc.find(travel => travel.number_travel_doc === alldata[indexCheck].No)) {
-                    console.error("data travel doc column " + (indexCheck + 1) + "already exist")
+                    fs.unlinkSync(req.file.path)
+                    console.error("data travel doc column " + (indexCheck + 1) + " already exist")
                     return {
                         status: false,
                         code: 404,
-                        error: "data travel doc column " + (indexCheck + 1) + "already exist"
+                        error: "data travel doc column " + (indexCheck + 1) + " already exist"
                     }
                 }
 
@@ -111,7 +112,7 @@ class _receive {
                     file_mime: req.file.mimetype,
                     file_path: req.file.path,
                     file_extension: 'xlsx',
-                    user_id: req.users.id
+                    user_id: req.user.id
                 }
             })
 
@@ -163,7 +164,7 @@ class _receive {
                         await prisma.travelDoc.create({
                             data: {
                                 number_travel_doc: alldata[indexStore].No,
-                                auth_user_id: req.users.id,
+                                auth_user_id: req.user.id,
                                 supplier_id: supplierId,
                                 file_material_id: fileStore.id
                             }

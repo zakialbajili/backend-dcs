@@ -126,23 +126,6 @@ class _placement {
 
 
             // percobaan 2
-            // menghitung jumlah berat dari material yang sama dan telah disimpan
-            const sumWeight = await prisma.materialReceive.aggregate({
-                where: {
-                    PlacementRack: {
-                        some: {
-                            material_receive: {
-                                material_id : materialReceive.MaterialReceive[0].material_id,
-                                batch_material_id: materialReceive.MaterialReceive[0].batch_material_id,
-                            }
-                        }
-                    }
-                },
-                _sum: {
-                    weight: true
-                },
-            })
-
             //cari rak yang menyimpan material yang sama
             let placement = await prisma.rack.findFirst({
                 where: {
@@ -157,6 +140,63 @@ class _placement {
                 }
             })
 
+
+            let cek = true;
+            while (cek == true && placement) {
+                // hitung total berat material di rak
+                const sumWeight = await prisma.materialReceive.aggregate({
+                    where: {
+                        PlacementRack: {
+                            some: {
+                                rack_id: placement.id,
+                                material_receive: {
+                                    material_id : materialReceive.MaterialReceive[0].material_id,
+                                    batch_material_id: materialReceive.MaterialReceive[0].batch_material_id,
+                                }
+                            }
+                        }
+                    },
+                    _sum: {
+                        weight: true
+                    },
+                })
+
+                // cek apakah rak masih bisa menampung material
+                if ((sumWeight._sum.weight + materialReceive.MaterialReceive[0].weight) * 1000 > placement.max_capacity) {
+                    // tidak dapat menampung
+                    // cari rak lain yang berisi material yang sama
+                    // jika tidak ada (null) looping berhenti
+                    placement = await prisma.rack.findFirst({
+                        where: {
+                            AND : [
+                                {
+                                    id: {
+                                        not: placement.id
+                                    },
+                                }, 
+                                {
+                                    id: {
+                                        gt: placement.id
+                                    }
+                                }
+                            ],
+                            PlacementRack: {
+                                some: {
+                                    material_receive: {
+                                        material_id : materialReceive.MaterialReceive[0].material_id,
+                                        batch_material_id: materialReceive.MaterialReceive[0].batch_material_id,
+                                    }
+                                }
+                            }
+                        }
+                    })
+                } else {
+                    // dapat menampung
+                    // loopong dihentikan (placement ditemukan)
+                    cek = false;
+                }
+            }
+
             if (!placement) {
                 //cari rak yang masih kosong (belum menyimpan material lain)
                 placement = await prisma.rack.findFirst({
@@ -167,22 +207,6 @@ class _placement {
                         },
                         PlacementRack: {
                             none: {}
-                        }
-                    }
-                })
-            }
-            
-            // jika material sudah pernah disimpan
-            // cek apakah rak masih bisa menampung material
-            if ((sumWeight._sum.weight + materialReceive.MaterialReceive[0].weight) * 1000 > placement.max_capacity) {
-                placement = await prisma.rack.findFirst({
-                    where: {
-                        id: {
-                            not: placement.id
-                        },
-                        type: materialReceive.MaterialReceive[0].type,
-                        max_capacity: {
-                            gte: materialReceive.MaterialReceive[0].weight * 1000
                         }
                     }
                 })
@@ -309,6 +333,7 @@ class _placement {
                 where: {
                     PlacementRack: {
                         some: {
+                            rack_id: rack.id,
                             material_receive: {
                                 material_id : materialReceive.material_id,
                                 batch_material_id: materialReceive.batch_material_id,
@@ -320,10 +345,6 @@ class _placement {
                     weight: true
                 },
             })
-
-            if (!sumWeight._sum.weight) {
-                sumWeight._sum.weight = 0
-            }
 
             // mencari apakah rack sudah pernah terisi
             const placement = await prisma.placementRack.findFirst({
@@ -349,6 +370,15 @@ class _placement {
                     status: false,
                     code: 403,
                     error: 'Rack is full'
+                }
+            }
+
+            // rak belum pernah digunakan tetapi kapitas tidak cukup
+            if (rack.max_capacity < materialReceive.weight * 1000) {
+                return {
+                    status: false,
+                    code: 404,
+                    error: 'Material exceeds the rack capacity'
                 }
             }
             // end percobaan 2
