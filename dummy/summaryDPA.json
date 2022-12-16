@@ -1,0 +1,52 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "plan": 600,
+      "actual": 400,
+      "percentage": 66.67,
+      "created_at": "2022-12-08T04:19:40.534Z",
+      "updated_at": "2022-12-08T04:19:40.534Z"
+    },
+    {
+      "id": 1,
+      "plan": 700,
+      "actual": 400,
+      "percentage": 57.14,
+      "created_at": "2022-11-08T04:19:40.534Z",
+      "updated_at": "2022-11-08T04:19:40.534Z"
+    },
+    {
+      "id": 1,
+      "plan": 800,
+      "actual": 500,
+      "percentage": 62.5,
+      "created_at": "2022-10-08T04:19:40.534Z",
+      "updated_at": "2022-10-08T04:19:40.534Z"
+    },
+    {
+      "id": 1,
+      "plan": 400,
+      "actual": 400,
+      "percentage": 100,
+      "created_at": "2022-09-08T04:19:40.534Z",
+      "updated_at": "2022-09-08T04:19:40.534Z"
+    },
+    {
+      "id": 1,
+      "plan": 500,
+      "actual": 500,
+      "percentage": 100,
+      "created_at": "2022-08-08T04:19:40.534Z",
+      "updated_at": "2022-08-08T04:19:40.534Z"
+    },
+    {
+      "id": 1,
+      "plan": 700,
+      "actual": 600,
+      "percentage": 85.71,
+      "created_at": "2022-07-08T04:19:40.534Z",
+      "updated_at": "2022-07-08T04:19:40.534Z"
+    }
+  ]
+}

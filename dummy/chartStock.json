@@ -1,0 +1,46 @@
+{
+    "data": [
+        {
+            "id_stock" : 1,
+            "partName" : "Tailgate Ikuyo",
+            "qty" : 70,
+            "created_at" : "Jumat, 25 November 2022",
+            "updated_at" : "Jumat, 25 November 2022"
+        },
+        {
+            "id_stock" : 2,
+            "partName" : "Garnish RR Bumper LWR",
+            "qty" : 40,
+            "created_at" : "Jumat, 25 November 2022",
+            "updated_at" : "Jumat, 25 November 2022"
+        },
+        {
+            "id_stock" : 3,
+            "partName" : "Console Floor FR LWR",
+            "qty" : 20,
+            "created_at" : "Jumat, 25 November 2022",
+            "updated_at" : "Jumat, 25 November 2022"
+        },
+        {
+            "id_stock" : 4,
+            "partName" : "Garnish Tailgate UPR",
+            "qty" : 40,
+            "created_at" : "Jumat, 25 November 2022",
+            "updated_at" : "Jumat, 25 November 2022"
+        },
+        {
+            "id_stock" : 5,
+            "partName" : "Garnish Floor FR LWR",
+            "qty" : 18,
+            "created_at" : "Jumat, 25 November 2022",
+            "updated_at" : "Jumat, 25 November 2022"
+        },
+        {
+            "id_stock" : 6,
+            "partName" : "Garnish RR Tailgate LWR",
+            "qty" : 80,
+            "created_at" : "Jumat, 25 November 2022",
+            "updated_at" : "Jumat, 25 November 2022"
+        }
+    ]
+}

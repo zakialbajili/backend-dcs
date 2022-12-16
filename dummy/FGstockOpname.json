@@ -1,0 +1,64 @@
+{
+    "data": [
+        {
+            "id":1,
+            "part_id":1,
+            "supplier":"TKI",
+            "part-number":"IT01-RBL0105-XX-XX",
+            "part-name":"GARNISH RR BUMPER LWR",
+            "min" : 50,
+            "max" : 500,
+            "inbound":400,
+            "outbond":100,
+            "sisa":300,
+            "status":"normal",
+            "created_at": "25/11/2022",
+            "updated_at": "25/11/2022"
+        },
+        {
+            "id":2,
+            "part_id":2,
+            "supplier":"TKI",
+            "part-number":"IT02-CAF0200-XX-XX",
+            "part-name":"CONSOLE FLOOR FR LWR",
+            "min" : 1000,
+            "max" : 2000,
+            "inbound":5000,
+            "outbond":2000,
+            "sisa":3000,
+            "status":"normal",
+            "created_at": "25/11/2022",
+            "updated_at": "25/11/2022"
+        },
+        {
+            "id":3,
+            "part_id":3,
+            "supplier":"TKI",
+            "part-number":"IK01-GTG0101-XX-XX",
+            "part-name":"Tailgate Ikuyo",
+            "min" : 50,
+            "max" : 500,
+            "inbound":100,
+            "outbond":60,
+            "sisa":40,
+            "status":"underload",
+            "created_at": "25/11/2022",
+            "updated_at": "25/11/2022"
+        },
+        {
+            "id":4,
+            "part_id":4,
+            "supplier":"TKI",
+            "part-number":"HM02-GTU0101-XX-XX",
+            "part-name":"GARNISH TAILGATE UPR (IPL)",
+            "min" : 1000,
+            "max" : 20000,
+            "inbound":25000,
+            "outbond":0,
+            "sisa":50,
+            "status":"0VERLOAD",
+            "created_at": "25/11/2022",
+            "updated_at": "25/11/2022"
+        }
+    ]
+}

@@ -1,0 +1,60 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "supplier_id": 1,
+      "material_receive_id": 1,
+      "batch_material_id": 1,
+      "actual": 500,
+      "supplier": "HPP",
+      "batch_material_name": "ABS SR0325",
+      "type": "M",
+      "qty_min": 10000,
+      "qty_max": 100000,
+      "created_at": "2022-12-08T04:19:40.534Z",
+      "updated_at": "2022-12-08T04:19:40.534Z"
+    },
+    {
+      "id": 2,
+      "supplier_id": 2,
+      "material_receive_id": 2,
+      "batch_material_id": 2,
+      "actual": 2000,
+      "supplier": "HPP",
+      "batch_material_name": "MB Lumine Black 7893-BO",
+      "type": "B",
+      "qty_min": 1000,
+      "qty_max": 20000,
+      "created_at": "2022-12-08T04:19:40.534Z",
+      "updated_at": "2022-12-08T04:19:40.534Z"
+    },
+    {
+      "id": 3,
+      "supplier_id": 3,
+      "material_receive_id": 3,
+      "batch_material_id": 3,
+      "actual": 11000,
+      "supplier": "HPP",
+      "batch_material_name": "PP-TD10 MM713H CMY20008 BEIGE",
+      "type": "M",
+      "qty_min": 10000,
+      "qty_max": 100000,
+      "created_at": "2022-12-08T04:19:40.534Z",
+      "updated_at": "2022-12-08T04:19:40.534Z"
+    },
+    {
+      "id": 4,
+      "supplier_id": 4,
+      "material_receive_id": 4,
+      "batch_material_id": 4,
+      "actual": 5000,
+      "supplier": "HPP",
+      "batch_material_name": "PLAS-PRT-14050",
+      "type": "B",
+      "qty_min": 1000,
+      "qty_max": 20000,
+      "created_at": "2022-12-08T04:19:40.534Z",
+      "updated_at": "2022-12-08T04:19:40.534Z"
+    }
+  ]
+}

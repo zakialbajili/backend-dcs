@@ -10,6 +10,11 @@ const SeederController = require("./controllers/SeederController")
 const PlacementController = require("./controllers/PlacementController")
 const hwoController = require("./controllers/history_work_orderController")
 const supplierController = require("./controllers/SupplierController")
+const MaterialController = require('./controllers/MaterialController');
+const SummaryController = require('./controllers/SummaryController');
+const FGproductionController = require('./controllers/FGProductionController');
+const FGStockOpnameController = require('./controllers/FGStockOpnameController');
+const MaterialStockController = require('./controllers/MaterialStockController');
 
 const _routes = [
     ['users', UserController],
@@ -25,14 +30,19 @@ const _routes = [
     ['history_work_order', hwoController],
     ['supplier', supplierController]
 ]
+  ['material', MaterialController],
+  ['summary', SummaryController],
+  ['production', FGproductionController],
+  ['fg/stock', FGStockOpnameController],
+  ['mStocks', MaterialStockController],
 
 const routes = (app) => {
-    _routes.forEach(route => {
-        const [url, controller] = route
+  _routes.forEach((route) => {
+    const [url, controller] = route;
 
         // http://localhost:8080/api
         app.use(`/api/${url}`, controller)
     })
 }
 
-module.exports = routes
+module.exports = routes;
