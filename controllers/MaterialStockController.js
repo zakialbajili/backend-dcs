@@ -5,6 +5,12 @@ const auth = require('../middleware/auth-middleware');
 
 const MaterialStockController = Router();
 
+MaterialStockController.get('/stocks', auth, async (req, res) => {
+  const list = await m$auth.listMaterial();
+
+  response.sendResponse(res, list);
+});
+
 MaterialStockController.get('/minmax', auth, async (req, res) => {
   let supplierId = req.query.supplierId;
 
@@ -14,7 +20,7 @@ MaterialStockController.get('/minmax', auth, async (req, res) => {
 });
 
 // SW.C
-MaterialStockController.get('/in_out', auth, async (req, res) => {
+MaterialStockController.get('/inout', auth, async (req, res) => {
   let month = req.query.month;
 
   const list = await m$auth.listMaterialInOut({ month: month });

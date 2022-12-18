@@ -1,15 +1,32 @@
 const prisma = require('../helpers/database');
 const Joi = require('joi');
+const list = require('../dummy/chartmaterialStock.json');
 const listMinMax = require('../dummy/minmaxStockMaterial.json');
 const listInOut = require('../dummy/material_in_out.json');
 const jwt = require('jsonwebtoken');
 
 class _stock {
+  listMaterial = async () => {
+    try {
+      return {
+        status: true,
+        code: 200,
+        list,
+      };
+    } catch (error) {
+      console.error('liststock stock module Error: ', error);
+      return {
+        status: false,
+        error,
+      };
+    }
+  };
+
   listMaterialStock = async ({ supplierId: supplierId }) => {
     try {
       if (supplierId != undefined) {
         const filteredList = listMinMax.data.filter(function (item) {
-          return item.material_id == materialId;
+          return item.supplier_id == supplierId;
         });
         return {
           status: true,
