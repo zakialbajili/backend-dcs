@@ -14,7 +14,7 @@ class _stock {
         list,
       };
     } catch (error) {
-      console.error('liststock piechart stock module Error: ', error);
+      console.error('liststock stock module Error: ', error);
       return {
         status: false,
         error,
@@ -26,6 +26,7 @@ class _stock {
     try {
       if (supplier != undefined) {
         const filteredList = listMinMax.data.filter(function (item) {
+          return item.supplier == supplier;
           return item.supplier == supplier;
         });
         return {
@@ -95,53 +96,6 @@ class _stock {
         error,
       };
     }
-
-    // listMonitoringRack = async ({ type: type, address: address }) => {
-    //   try {
-    //     if (type != undefined && address == undefined) {
-    //       const filteredList = listMonitoringRack.data.filter(function (item) {
-    //         return item.type == type;
-    //       });
-    //       return {
-    //         status: true,
-    //         code: 200,
-    //         list: filteredList,
-    //       };
-    //     } else if (type == undefined && address != undefined) {
-    //       const filteredList = listMonitoringRack.data.filter(function (item) {
-    //         const addressItem = item.address.substring(1, 8);
-    //         return addressItem == address;
-    //       });
-    //       return {
-    //         status: true,
-    //         code: 200,
-    //         list: filteredList,
-    //       };
-    //     } else if (type != undefined && address != undefined) {
-    //       const filteredList = listMonitoringRack.data.filter(function (item) {
-    //         const addressItem = item.address.substring(1, 8);
-    //         return addressItem == address && item.type == type;
-    //       });
-    //       return {
-    //         status: true,
-    //         code: 200,
-    //         list: filteredList,
-    //       };
-    //     } else {
-    //       return {
-    //         status: true,
-    //         code: 200,
-    //         list: listMonitoringRack,
-    //       };
-    //     }
-    //   } catch (error) {
-    //     console.error('list monitoring rack fg module Error: ', error);
-    //     return {
-    //       status: false,
-    //       error,
-    //     };
-    //   }
-    // };
   };
 }
 
