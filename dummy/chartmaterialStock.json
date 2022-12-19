@@ -2,17 +2,13 @@
   "data": [
     {
       "id": 1,
-      "material_receive_id": 1,
-      "material_id": 1,
       "material_name": "PP-TD10 MM713H CMH20013 GREY",
-      "weight": 1200,
+      "weight": 1500,
       "created_at": "2022-12-08T04:19:40.534Z",
       "updated_at": "2022-12-08T04:19:40.534Z"
     },
     {
       "id": 2,
-      "material_receive_id": 2,
-      "material_id": 2,
       "material_name": "PP-TD10 MM713H CMY20008 BEIGE",
       "weight": 1332,
       "created_at": "2022-12-08T04:19:40.534Z",
@@ -20,10 +16,8 @@
     },
     {
       "id": 3,
-      "material_receive_id": 3,
-      "material_id": 3,
-      "material_name": "null",
-      "weight": 1322,
+      "material_name": "MASTER BATCH PLAMASTER JB3025",
+      "weight": 1450,
       "created_at": "2022-12-08T04:19:40.534Z",
       "updated_at": "2022-12-08T04:19:40.534Z"
     }

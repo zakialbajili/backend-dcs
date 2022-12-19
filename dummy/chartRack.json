@@ -1,0 +1,60 @@
+{
+  "data": [
+    {
+      "id_stock": 1,
+      "type": "M",
+      "address": "A1.01.01",
+      "supplier": [
+        {
+          "Suzuki": 200
+        },
+        {
+          "HPP": 100
+        },
+        {
+          "FPP": 200
+        },
+        {
+          "CSV": 100
+        },
+        {
+          "FSV": 200
+        },
+        {
+          "HSV": 100
+        }
+      ],
+      "Used": 900,
+      "Available": 100,
+      "Total_Supplier": 6
+    },
+    {
+      "id": 2,
+      "type": "B",
+      "address": "A2.01.01",
+      "supplier": [
+        {
+          "Suzuki": 300
+        },
+        {
+          "HPP": 200
+        },
+        {
+          "FPP": 300
+        },
+        {
+          "CSV": 400
+        },
+        {
+          "FSV": 500
+        },
+        {
+          "HSV": 100
+        }
+      ],
+      "Used": 1800,
+      "Available": 200,
+      "Total_Supplier": 6
+    }
+  ]
+}

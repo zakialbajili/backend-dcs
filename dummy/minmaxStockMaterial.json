@@ -2,57 +2,129 @@
   "data": [
     {
       "id": 1,
-      "supplier_id": 1,
-      "material_receive_id": 1,
-      "batch_material_id": 1,
-      "actual": 500,
-      "supplier": "HPP",
-      "batch_material_name": "ABS SR0325",
+      "actual": 10000,
+      "supplier": "Suzuki",
+      "batch_material_name": "WR-9330IDG",
       "type": "M",
-      "qty_min": 10000,
-      "qty_max": 100000,
-      "created_at": "2022-12-08T04:19:40.534Z",
-      "updated_at": "2022-12-08T04:19:40.534Z"
+      "qty": [
+        {
+          "min": 3000,
+          "max": 20000,
+          "status": "overload"
+        }
+      ],
+      "created_at": "2022-11-08T04:19:40.534Z",
+      "updated_at": "2022-11-08T04:19:40.534Z"
     },
     {
       "id": 2,
-      "supplier_id": 2,
-      "material_receive_id": 2,
-      "batch_material_id": 2,
       "actual": 2000,
       "supplier": "HPP",
       "batch_material_name": "MB Lumine Black 7893-BO",
       "type": "B",
-      "qty_min": 1000,
-      "qty_max": 20000,
+      "qty": [
+        {
+          "min": 1000,
+          "max": 20000,
+          "status": "normal"
+        }
+      ],
       "created_at": "2022-12-08T04:19:40.534Z",
       "updated_at": "2022-12-08T04:19:40.534Z"
     },
     {
       "id": 3,
-      "supplier_id": 3,
-      "material_receive_id": 3,
-      "batch_material_id": 3,
       "actual": 11000,
       "supplier": "HPP",
       "batch_material_name": "PP-TD10 MM713H CMY20008 BEIGE",
       "type": "M",
-      "qty_min": 10000,
-      "qty_max": 100000,
+      "qty": [
+        {
+          "min": 10000,
+          "max": 100000,
+          "status": "normal"
+        }
+      ],
       "created_at": "2022-12-08T04:19:40.534Z",
       "updated_at": "2022-12-08T04:19:40.534Z"
     },
     {
       "id": 4,
-      "supplier_id": 4,
-      "material_receive_id": 4,
-      "batch_material_id": 4,
+      "actual": 500,
+      "supplier": "Suzuki",
+      "batch_material_name": "MB-MW6050B",
+      "type": "B",
+      "qty": [
+        {
+          "min": 2000,
+          "max": 10000,
+          "status": "normal"
+        }
+      ],
+      "created_at": "2022-11-08T04:19:40.534Z",
+      "updated_at": "2022-11-08T04:19:40.534Z"
+    },
+    {
+      "id": 5,
       "actual": 5000,
       "supplier": "HPP",
       "batch_material_name": "PLAS-PRT-14050",
       "type": "B",
-      "qty_min": 1000,
-      "qty_max": 20000,
+      "qty": [
+        {
+          "min": 1000,
+          "max": 20000,
+          "status": "normal"
+        }
+      ],
+      "created_at": "2022-12-08T04:19:40.534Z",
+      "updated_at": "2022-12-08T04:19:40.534Z"
+    },
+    {
+      "id": 6,
+      "actual": 10000,
+      "supplier": "Suzuki",
+      "batch_material_name": "WR-9330IDG",
+      "type": "M",
+      "qty": [
+        {
+          "min": 3000,
+          "max": 20000,
+          "status": "overload"
+        }
+      ],
+      "created_at": "2022-11-08T04:19:40.534Z",
+      "updated_at": "2022-11-08T04:19:40.534Z"
+    },
+    {
+      "id": 7,
+      "actual": 500,
+      "supplier": "HPP",
+      "batch_material_name": "ABS SR0325",
+      "type": "M",
+      "qty": [
+        {
+          "min": 10000,
+          "max": 100000,
+          "status": "overload"
+        }
+      ],
+      "created_at": "2022-12-08T04:19:40.534Z",
+      "updated_at": "2022-12-08T04:19:40.534Z"
+    },
+    {
+      "id": 8,
+      "actual": 10000,
+      "supplier": "Suzuki",
+      "batch_material_name": "WX-9950UD",
+      "type": "M",
+      "qty": [
+        {
+          "min": 10000,
+          "max": 30000,
+          "status": "overload"
+        }
+      ],
       "created_at": "2022-12-08T04:19:40.534Z",
       "updated_at": "2022-12-08T04:19:40.534Z"
     }

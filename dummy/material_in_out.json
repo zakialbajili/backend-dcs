@@ -3,18 +3,90 @@
     {
       "id": 1,
       "material_id": 1,
-      "material_in": 1800,
-      "material_out": 1200,
-      "created_at": "2022-11-08T04:19:40.534Z",
-      "updated_at": "2022-11-08T04:19:40.534Z"
+      "material": "material",
+      "day": [
+        {
+          "monday": [
+            {
+              "in": 200,
+              "out": 100
+            }
+          ],
+          "Tuesday": [
+            {
+              "in": 400,
+              "out": 200
+            }
+          ],
+          "Wednesday": [
+            {
+              "in": 600,
+              "out": 400
+            }
+          ],
+          "Thursday": [
+            {
+              "in": 200,
+              "out": 200
+            }
+          ],
+          "Friday": [
+            {
+              "in": 400,
+              "out": 300
+            }
+          ],
+          "total_IN": 1800,
+          "total_OUT": 1200,
+          "total_STOCK": 16700
+        }
+      ],
+      "created_at": "2022-12-05",
+      "updated_at": "2022-12-05"
     },
     {
       "id": 2,
       "material_id": 2,
-      "material_in": 1500,
-      "material_out": 1000,
-      "created_at": "2022-12-08T04:19:40.534Z",
-      "updated_at": "2022-12-08T04:19:40.534Z"
+      "material": "batch material",
+      "day": [
+        {
+          "monday": [
+            {
+              "in": 200,
+              "out": 100
+            }
+          ],
+          "Tuesday": [
+            {
+              "in": 400,
+              "out": 200
+            }
+          ],
+          "Wednesday": [
+            {
+              "in": 600,
+              "out": 400
+            }
+          ],
+          "Thursday": [
+            {
+              "in": 200,
+              "out": 200
+            }
+          ],
+          "Friday": [
+            {
+              "in": 400,
+              "out": 300
+            }
+          ],
+          "total_IN": 1800,
+          "total_OUT": 1200,
+          "total_STOCK": 16700
+        }
+      ],
+      "created_at": "2022-12-12",
+      "updated_at": "2022-12-12"
     }
   ]
 }

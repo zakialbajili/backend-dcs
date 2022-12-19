@@ -5,19 +5,27 @@ const auth = require('../middleware/auth-middleware');
 
 const MaterialStockController = Router();
 
-MaterialStockController.get('/minmax', auth, async (req, res) => {
-  let supplierId = req.query.supplierId;
+MaterialStockController.get('/stocks', auth, async (req, res) => {
+  const list = await m$auth.listMaterialPieChart();
 
-  const list = await m$auth.listMaterialStock({ supplierId: supplierId });
+  response.sendResponse(res, list);
+});
+
+MaterialStockController.get('/minmax', auth, async (req, res) => {
+  let supplier = req.query.supplier;
+
+  const list = await m$auth.listMaterialStock({ supplier: supplier });
 
   response.sendResponse(res, list);
 });
 
 // SW.C
-MaterialStockController.get('/in_out', auth, async (req, res) => {
-  let month = req.query.month;
+MaterialStockController.get('/inout', auth, async (req, res) => {
+  let materialId = req.query.material_id;
+  let startdate = req.query.startdate;
+  let enddate = req.query.enddate;
 
-  const list = await m$auth.listMaterialInOut({ month: month });
+  const list = await m$auth.listMaterialInOut({ materialId: materialId, startdate: startdate, enddate: enddate });
 
   response.sendResponse(res, list);
 });
