@@ -4,15 +4,75 @@ const Joi = require("joi");
 const QRCode = require('qrcode');
 
 class _request{
-    list = async () => {
+    list = async (body) => {
         try {
-            const list = await prisma.$queryRaw`Select prod_date, no_work_order FROM work_order`
-            console.log(list)
+            const schema = Joi.number().required()
+
+            const validation = schema.validate(body.id)
+
+            if (validation.error) {
+                const errorDetails = validation.error.details.map(detail => detail.message)
+
+                return {
+                    status: false,
+                    code: 422,
+                    error: errorDetails.join(', ')
+                }
+            }
+
+            const listmaterial = await prisma.$queryRaw`
+            WITH wo AS ( 
+                SELECT a.no_work_order, (a.total_order * b.quantity / 1000) as mat_weight, a.prod_date, b.material_id, b.batch_material_id, a.supplier_id, b.part_number, b.part_name 
+                FROM work_order a, part b 
+                WHERE a.id_part = b.id AND a.id_file = ${parseInt(body.id)}
+            )
+            SELECT c.no_work_order, DATE(c.prod_date) As tanggal, c.mat_weight, a.material_name, a.material_number, b.name, c.part_number, c.part_name 
+            FROM materials a, suppliers b, wo c 
+            WHERE c.material_id = a.id AND a.supplier_id = b.id`
+
+            const listbatch = await prisma.$queryRaw`
+            WITH wo AS ( 
+                SELECT a.no_work_order, (a.total_order * b.quantity / 1000) as bat_weight, a.prod_date, b.material_id, b.batch_material_id, a.supplier_id, b.part_number, b.part_name 
+                FROM work_order a, part b 
+                WHERE a.id_part = b.id AND a.id_file = ${parseInt(body.id)}
+            )
+            SELECT c.no_work_order, DATE(c.prod_date) As tanggal, c.bat_weight, a.batch_material_name, a.batch_material_number, b.name, c.part_number, c.part_name 
+            FROM batch_materials a, suppliers b, wo c 
+            WHERE c.batch_material_id = a.id AND a.supplier_id = b.id`
+
+            listmaterial.forEach(m => {
+                const batch = listbatch.find(b => b.no_work_order == m.no_work_order)
+                if (batch != undefined) {
+                    Object.assign(m, {
+                        "batch_material_number": batch.batch_material_number,
+                        "batch_material_name" : batch.batch_material_name,
+                        "bat_weight" : batch.bat_weight
+                    })
+                } else {
+                    Object.assign(m, {
+                        "batch_material_number": "-",
+                        "batch_material_name" : "-",
+                        "bat_weight" : 0
+                    })
+                }
+            })
+
+            listbatch.forEach(b => {
+                const material = listmaterial.find(m => m.no_work_order == b.no_work_order)
+                if (material == undefined) {
+                    Object.assign(b, {
+                        "material_number": "-",
+                        "material_name" : "-",
+                        "mat_weight" : 0
+                    })
+                    listmaterial.push(b)
+                }
+            })
 
             return {
                 status: true,
                 code: 200,
-                data: list
+                data: listmaterial
             }
         } catch (error) {
             console.error('List material request module Error: ', error);
@@ -48,66 +108,64 @@ class _request{
                 }
             })
 
-            // const data = await prisma.$queryRaw`Select no_work_order, prod_date, part_number, part_name, material_name, batch_material_name`
+            const listmaterial = await prisma.$queryRaw`
+            WITH wo AS ( 
+                SELECT a.no_work_order, (a.total_order * b.quantity / 1000) as mat_weight, a.prod_date, b.material_id, b.batch_material_id, a.supplier_id, b.part_number, b.part_name 
+                FROM work_order a, part b 
+                WHERE a.id_part = b.id AND a.supplier_id = ${supllier.id}
+            )
+            SELECT c.no_work_order, DATE(c.prod_date) As tanggal, c.mat_weight, a.material_name, a.material_number, b.name, c.part_number, c.part_name 
+            FROM materials a, suppliers b, wo c 
+            WHERE c.material_id = a.id AND c.supplier_id = b.id`
 
-            const data = [
-                {
-                 "No. Work Order": "23102022SPK001",
-                 "Prod. Date": "23\/10\/2022",
-                 "Part Number": "IT01-RBL0105-XX-XX",
-                 "Part Name": "GARNISH RR BUMPER LWR (IPL)",
-                 "Material Number": "PP-TD10-GY",
-                 "Material Name": "PP-TD10 MM713H CMH20013 GREY",
-                 "Mat Weight Kg": 200,
-                 "Batch Material Number": "PLAS-PRT-14050",
-                 "Batch Material Name": "PLASTIC PROT 140MMX200MX50MC",
-                 "BM Weight Kg": 100
-                },
-                {
-                 "No. Work Order": "23102022SPK002",
-                 "Prod. Date": "23\/10\/2022",
-                 "Part Number": "IT02-CAF0200-XX-XX",
-                 "Part Name": "\tCONSOLE FLOOR FR LWR",
-                 "Material Number": "PP-TD25-MM755H",
-                 "Material Name": "PP-TD-25 MM755H CMX20007 Black",
-                 "Mat Weight Kg": 125,
-                 "Batch Material Number": "-",
-                 "Batch Material Name": "-",
-                 "BM Weight Kg": "-"
-                },
-                {
-                 "No. Work Order": "23102022SPK003",
-                 "Prod. Date": "23\/10\/2022",
-                 "Part Number": "IK01-GTG0101-XX-XX",
-                 "Part Name": "\tTailgate Ikuyo",
-                 "Material Number": "PC-SC1220-UR",
-                 "Material Name": "SAMSUNG SC-1220UR\/G02164",
-                 "Mat Weight Kg": 220,
-                 "Batch Material Number": "-",
-                 "Batch Material Name": "-",
-                 "BM Weight Kg": "-"
-                },
-                {
-                 "No. Work Order": "23102022SPK004",
-                 "Prod. Date": "23\/10\/2022",
-                 "Part Number": "HM02-GTU0101-XX-XX",
-                 "Part Name": "GARNISH TAILGATE UPR (IPL)",
-                 "Material Number": "PP-TD20-AP-BP31",
-                 "Material Name": "PP+E\/P-TD20 AP-BP-31 Black",
-                 "Mat Weight Kg": 300,
-                 "Batch Material Number": "MB-LMN-6170",
-                 "Batch Material Name": "LUMINE BLACK 6170-BC",
-                 "BM Weight Kg": 250
-                }
-            ]
+            const listbatch = await prisma.$queryRaw`
+            WITH wo AS ( 
+                SELECT a.no_work_order, (a.total_order * b.quantity / 1000) as bat_weight, a.prod_date, b.material_id, b.batch_material_id, a.supplier_id, b.part_number, b.part_name 
+                FROM work_order a, part b 
+                WHERE a.id_part = b.id AND a.supplier_id = ${supllier.id}
+            )
+            SELECT c.no_work_order, DATE(c.prod_date) As tanggal, c.bat_weight, a.batch_material_name, a.batch_material_number, b.name, c.part_number, c.part_name 
+            FROM batch_materials a, suppliers b, wo c 
+            WHERE c.batch_material_id = a.id AND c.supplier_id = b.id`
+
+            if (listbatch.length == 0 && listmaterial.length > 0) {
+                listmaterial.forEach(m => {
+                    m.mat_weight = Number(m.mat_weight)
+                    Object.assign(m, {
+                        "batch_material_number": "-",
+                        "batch_material_name" : "-",
+                        "bat_weight" : 0
+                    })
+                })
+            }else if (listbatch.length > 0 && listmaterial.length == 0) {
+                listbatch.forEach(b => {
+                    Object.assign(b, {
+                        "material_number": "-",
+                        "material_name" : "-",
+                        "mat_weight" : 0
+                    })
+                    listmaterial.push(b)
+                })
+            } else {
+                listmaterial.forEach(m => {
+                    const batch = listbatch.find(b => b.no_work_order == m.no_work_order)
+                    if (batch != undefined) {
+                        Object.assign(m, {
+                            "batch_material_number": batch.batch_material_number,
+                            "batch_material_name" : batch.batch_material_name,
+                            "bat_weight" : Number(batch.bat_weight)
+                        })
+                    }
+                })
+            }
         
-            const generateQR = await QRCode.toDataURL("1");
+            const generateQR = await QRCode.toDataURL(supllier.id.toString());
         
             let workbook = new excel.Workbook();
             let worksheet = workbook.addWorksheet("TodoPrisma");
         
             worksheet.getColumn(1).values = ['Material Req. No.', 'Export Date', 'Supplier']
-            worksheet.getColumn(2).values = ['MR-23102022', '22/10/2022', 'TKI']
+            worksheet.getColumn(2).values = [`MR-${Date.now()}`, new Date() , listmaterial[0].name]
         
             worksheet.addImage(workbook.addImage({
                 base64: generateQR,
@@ -119,7 +177,7 @@ class _request{
             })
         
             worksheet.getRow(7).values = [
-                'No. Work Order', 'Part Number', 'Prod. Date', 'Part Name', 
+                'No. Work Order', 'Prod. Date', 'Part Number', 'Part Name', 
                 'Material Number', 'Material Name', 'Mat Weight Kg', 'Batch Material Number',
                 'Batch Material Name', 'BM Weight Kg'
             ]
@@ -131,19 +189,19 @@ class _request{
             }
         
             worksheet.columns = [
-                { key: 'No. Work Order'},
-                { key: 'Prod. Date' },
-                { key: 'Part Number' },
-                { key: 'Part Name' },
-                { key: 'Material Number' },
-                { key: 'Material Name' },
-                { key: 'Mat Weight Kg'},
-                { key: 'Batch Material Number' },
-                { key: 'Batch Material Name' },
-                { key: 'BM Weight Kg' }
+                { key: 'no_work_order'},
+                { key: 'tanggal' },
+                { key: 'part_number' },
+                { key: 'part_name' },
+                { key: 'material_name' },
+                { key: 'material_number' },
+                { key: 'mat_weight'},
+                { key: 'batch_material_name' },
+                { key: 'batch_material_number' },
+                { key: 'bat_weight' }
             ]
         
-            worksheet.addRows(data)
+            worksheet.addRows(listmaterial)
         
             worksheet.columns.forEach((column, i) => {
                 var maxLength = 0;
@@ -157,6 +215,8 @@ class _request{
         
                 column.alignment = { vertical: 'middle', horizontal: 'center' }
             });
+
+            worksheet.getColumn('B').width = worksheet.getRow(1).values[2].toString().length + 4
         
             // res.setHeader(
             //     "Content-Type",
