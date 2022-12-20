@@ -27,4 +27,10 @@ hwoController.post('/', userSession, uploadFile.single('file'), async (req, res)
     //console.log(req.file)
     response.sendResponse(res, data)
 })
+hwoController.delete('/:id', async (req, res) => {
+    const data = await m$hwo.deletehwo(Number(req.params.id))
+
+    response.sendResponse(res, data)
+})
+
 module.exports = hwoController
