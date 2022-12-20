@@ -2,6 +2,34 @@ const prisma = require("../helpers/database")
 const Joi = require("joi")
 
 class _placement {
+    list = async () => {
+        try {
+            const list = await prisma.placementRack.findMany({
+                include: {
+                    rack: true,
+                    material_receive: {
+                        include: {
+                            material: true,
+                            batch_material: true
+                        }
+                    }
+                }
+            })
+
+            return {
+                status: true,
+                code: 200,
+                data: list
+            }
+        } catch (error) {
+            console.error('List Histrory Placement module Error:', error);
+            return {
+                status: false,
+                error
+            }
+        }
+    }
+
     suggestion = async (body) => {
         try {
             const schema = Joi.number().required()
@@ -271,6 +299,10 @@ class _placement {
             let materialReceive = await prisma.materialReceive.findFirst({
                 where: {
                     id: body.id_materialreceive
+                },
+                include: {
+                    material: true,
+                    batch_material: true
                 }
             })
 
@@ -393,7 +425,10 @@ class _placement {
             return {
                 status: true,
                 code: 202,
-                data: add
+                data: {
+                    materialReceive,
+                    rack
+                }
             }
 
         } catch (error) {
