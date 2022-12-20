@@ -5,14 +5,14 @@ const authorization = require('../middleware/auth-middleware')
 
 const MaterialRequestController = Router()
 
-MaterialRequestController.get('/', authorization, async (req, res) => {
+MaterialRequestController.post('/', authorization, async (req, res) => {
     const list = await m$request.list(req.body)
 
     response.sendResponse(res, list)
 })
 
 
-MaterialRequestController.get('/download', authorization, async (req, res) => {
+MaterialRequestController.post('/download', authorization, async (req, res) => {
     const download = await m$request.download(req.body)
 
     if (download.status) {
