@@ -4,49 +4,151 @@
       "id": 1,
       "plan": 600,
       "actual": 400,
+      "gap": 200,
       "percentage": 66.67,
-      "created_at": "2022-12-08T04:19:40.534Z",
-      "updated_at": "2022-12-08T04:19:40.534Z"
+      "day": "Thursday",
+      "created_at": "2022-12-1 06:50:54.56",
+      "updated_at": "2022-12-1 06:50:54.56"
     },
     {
-      "id": 1,
-      "plan": 700,
+      "id": 2,
+      "plan": 600,
       "actual": 400,
-      "percentage": 57.14,
-      "created_at": "2022-11-08T04:19:40.534Z",
-      "updated_at": "2022-11-08T04:19:40.534Z"
+      "gap": 200,
+      "percentage": 66.67,
+      "day": "Friday",
+      "created_at": "2022-12-2 06:50:54.56",
+      "updated_at": "2022-12-2 06:50:54.56"
     },
     {
-      "id": 1,
-      "plan": 800,
+      "id": 3,
+      "plan": 600,
       "actual": 500,
-      "percentage": 62.5,
-      "created_at": "2022-10-08T04:19:40.534Z",
-      "updated_at": "2022-10-08T04:19:40.534Z"
+      "gap": 100,
+      "percentage": 83.33,
+      "day": "Saturday",
+      "created_at": "2022-12-3 06:50:54.56",
+      "updated_at": "2022-12-3 06:50:54.56"
     },
     {
-      "id": 1,
-      "plan": 400,
-      "actual": 400,
-      "percentage": 100,
-      "created_at": "2022-09-08T04:19:40.534Z",
-      "updated_at": "2022-09-08T04:19:40.534Z"
+      "id": 4,
+      "plan": 700,
+      "actual": 500,
+      "gap": 200,
+      "percentage": 71.42,
+      "day": "Sunday",
+      "created_at": "2022-12-4 06:50:54.56",
+      "updated_at": "2022-12-4 06:50:54.56"
     },
     {
-      "id": 1,
+      "id": 5,
       "plan": 500,
       "actual": 500,
+      "gap": 0,
       "percentage": 100,
-      "created_at": "2022-08-08T04:19:40.534Z",
-      "updated_at": "2022-08-08T04:19:40.534Z"
+      "day": "Monday",
+      "created_at": "2022-12-5 06:50:54.56",
+      "updated_at": "2022-12-5 06:50:54.56"
     },
     {
-      "id": 1,
+      "id": 6,
       "plan": 700,
       "actual": 600,
+      "gap": 100,
       "percentage": 85.71,
-      "created_at": "2022-07-08T04:19:40.534Z",
-      "updated_at": "2022-07-08T04:19:40.534Z"
+      "day": "Tuesday",
+      "created_at": "2022-12-6 06:50:54.56",
+      "updated_at": "2022-12-6 06:50:54.56"
+    },
+    {
+      "id": 7,
+      "plan": 700,
+      "actual": 500,
+      "gap": 200,
+      "percentage": 71.42,
+      "day": "Wednesday",
+      "created_at": "2022-12-7 06:50:54.56",
+      "updated_at": "2022-12-7 06:50:54.56"
+    },
+    {
+      "id": 8,
+      "plan": 600,
+      "actual": 400,
+      "gap": 200,
+      "percentage": 66.67,
+      "day": "Thursday",
+      "created_at": "2022-12-8 06:50:54.56",
+      "updated_at": "2022-12-8 06:50:54.56"
+    },
+    {
+      "id": 9,
+      "plan": 800,
+      "actual": 600,
+      "gap": 200,
+      "percentage": 66.67,
+      "day": "Friday",
+      "created_at": "2022-12-9 06:50:54.56",
+      "updated_at": "2022-12-9 06:50:54.56"
+    },
+    {
+      "id": 10,
+      "plan": 500,
+      "actual": 500,
+      "gap": 0,
+      "percentage": 100,
+      "day": "Saturday",
+      "created_at": "2022-12-10 06:50:54.56",
+      "updated_at": "2022-12-10 06:50:54.56"
+    },
+    {
+      "id": 11,
+      "plan": 700,
+      "actual": 400,
+      "gap":  300,
+      "percentage": 57.14,
+      "day": "Friday",
+      "created_at": "2022-11-4 06:50:54.56",
+      "updated_at": "2022-11-4 06:50:54.56"
+    },
+    {
+      "id": 12,
+      "plan": 800,
+      "actual": 500,
+      "gap": 300,
+      "percentage": 62.5,
+      "day": "Tuesday",
+      "created_at": "2022-10-4 06:50:54.56",
+      "updated_at": "2022-10-4 06:50:54.56"
+    },
+    {
+      "id": 13,
+      "plan": 400,
+      "actual": 400,
+      "gap": 0,
+      "percentage": 100,
+      "day": "Sunday",
+      "created_at": "2022-09-4 06:50:54.56",
+      "updated_at": "2022-09-4 06:50:54.56"
+    },
+    {
+      "id": 14,
+      "plan": 500,
+      "actual": 500,
+      "gap": 0,
+      "percentage": 100,
+      "day": "Thursday",
+      "created_at": "2022-08-4 06:50:54.56",
+      "updated_at": "2022-08-4 06:50:54.56"
+    },
+    {
+      "id": 15,
+      "plan": 700,
+      "actual": 600,
+      "gap": 100,
+      "percentage": 85.71,
+      "day": "Monday",
+      "created_at": "2022-07-4 06:50:54.56",
+      "updated_at": "2022-07-4 06:50:54.56"
     }
   ]
 }
