@@ -25,4 +25,10 @@ MaterialRequestController.get('/download', authorization, async (req, res) => {
     }
 })
 
+MaterialRequestController.get('/mobile/:id', async (req, res) => {
+    const listrequest = await m$request.listrequest(req.params.id)
+
+    response.sendResponse(res, listrequest)
+})
+
 module.exports = MaterialRequestController

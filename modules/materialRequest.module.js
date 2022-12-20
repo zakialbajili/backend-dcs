@@ -258,6 +258,50 @@ class _request{
             }
         }
     }
+
+    listrequest = async (id) => {
+        try {
+            const schema = Joi.number().required()
+
+            const validation = schema.validate(id)
+
+            if (validation.error) {
+                const errorDetails = validation.error.details.map(detail => detail.message)
+
+                return {
+                    status: false,
+                    code: 422,
+                    error: errorDetails.join(', ')
+                }
+            }
+
+            const data = await prisma.work_order.findMany({
+                where: {
+                    supplier_id: parseInt(id)
+                },
+                select : {
+                    Part: {
+                        select: {
+                            material: true,
+                            batch_material: true
+                        }
+                    }
+                }
+            })
+
+            return {
+                status: true,
+                code: 200,
+                data
+            }
+        } catch (error) {
+            console.error('listrequest material request module Error: ', error);
+            return {
+                status: false,
+                error
+            }
+        }
+    }
 }
 
 module.exports = new _request()
