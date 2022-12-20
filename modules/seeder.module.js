@@ -87,6 +87,20 @@ class __seeder {
                 ]
             })
 
+            await prisma.part.createMany({
+                data: [
+                    { part_number: "IT01-RBL0105-XX-XX", part_name: "GARNISH RR BUMPER LWR (IPL)", die_cavity: 1, cycle_time: 64, target_pcs_per_shit: 320, part_weight: 1000, runner: 20, dango: 10, min_stock: 50, max_stock: 100, quantity: 1500, supplier_id: 1, material_id: 1, batch_material_id: null },
+                    { part_number: "IT02-CAF0200-XX-XX", part_name: "CONSOLE FLOOR FR LWR", die_cavity: 1, cycle_time: 64, target_pcs_per_shit: 320, part_weight: 1000, runner: 20, dango: 10, min_stock: 50, max_stock: 100, quantity: 1400, supplier_id: 3, material_id: null, batch_material_id: 3 }, 
+                    { part_number: "IK01-GTG0101-XX-XX", part_name: "Tailgate Ikuyo", die_cavity: 1, cycle_time: 64, target_pcs_per_shit: 320, part_weight: 1000, runner: 20, dango: 10, min_stock: 50, max_stock: 100, quantity: 1300, supplier_id: 2, material_id: 2, batch_material_id: 1 }, 
+                    { part_number: "HM02-GTU0101-XX-XX", part_name: "GARNISH TAILGATE UPR (IPL)", die_cavity: 1, cycle_time: 64, target_pcs_per_shit: 320, part_weight: 1000, runner: 20, dango: 10, min_stock: 50, max_stock: 100, quantity: 1500, supplier_id: 2, material_id: 2, batch_material_id: 2 },
+                    { part_number: "51787-OK070-C /51788-OK070-C", part_name: "REINFORCEMENT STEP RH/LH", die_cavity: 1, cycle_time: 64, target_pcs_per_shit: 320, part_weight: 1000, runner: 20, dango: 10, min_stock: 50, max_stock: 100, quantity: 1400, supplier_id: 4, material_id: 3, batch_material_id: 4 },
+                    { part_number: "72959-X7A01-A", part_name: "SPACER RR SEAT TURN SIDE", die_cavity: 1, cycle_time: 64, target_pcs_per_shit: 320, part_weight: 1000, runner: 20, dango: 10, min_stock: 50, max_stock: 100, quantity: 1300, supplier_id: 5, material_id: 4, batch_material_id: null },
+                    { part_number: "69743-BZ040-C0", part_name: "BUTTON DOOR LOCKING 202B", die_cavity: 1, cycle_time: 64, target_pcs_per_shit: 320, part_weight: 1000, runner: 20, dango: 10, min_stock: 50, max_stock: 100, quantity: 1600, supplier_id: 5, material_id: 5, batch_material_id: null }, 
+                    { part_number: "51727-OK110-C / 51728-OK110-C", part_name: "REINFORCEMENT BODY RH/LH", die_cavity: 1, cycle_time: 64, target_pcs_per_shit: 320, part_weight: 1000, runner: 20, dango: 10, min_stock: 50, max_stock: 100, quantity: 1500, supplier_id: 6, material_id: 6, batch_material_id: null }, 
+                    { part_number: "NPUL-A083QBFA", part_name: "MINI PULSATOR", die_cavity: 1, cycle_time: 64, target_pcs_per_shit: 320, part_weight: 1000, runner: 20, dango: 10, min_stock: 50, max_stock: 100, quantity: 1400, supplier_id: 7, material_id: null, batch_material_id: 5 }               
+                ]
+            })
+
             return {
                 status: true,
                 code: 200

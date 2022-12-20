@@ -295,7 +295,7 @@ class _receive {
                 data: destroymaterial,
             }
         } catch (error) {
-            console.error('Destroy receive module Error: ', error);
+            console.error('Destroy material receive module Error: ', error);
             return {
                 status: false,
                 error
@@ -362,7 +362,7 @@ class _receive {
                 data: list
             }
         } catch (error) {
-            console.error('listFile receive module Error: ', error);
+            console.error('list material receive module Error: ', error);
             return {
                 status: false,
                 error
@@ -372,7 +372,6 @@ class _receive {
 
     updateMaterialReceive = async (body, id) => {
         try {
-            console.log(body.weight)
             const schema = Joi.number().required()
 
             const validation = schema.validate(body.weight)
@@ -401,7 +400,7 @@ class _receive {
                 data: update
             }
         } catch (error) {
-            console.error('listFile receive module Error: ', error);
+            console.error('update material receive module Error: ', error);
             return {
                 status: false,
                 error
@@ -409,17 +408,84 @@ class _receive {
         }
     }
 
-    amount = async () => {
+    dashboard = async (body) => {
         try {
-            const amount = await prisma.materialReceive.count()
+            const schema = Joi.date().required()
+
+            const validation = schema.validate(body.date)
+            if (validation.error) {
+                const errorDetails = validation.error.details.map(detail => detail.message)
+
+                return {
+                    status: false,
+                    code: 422,
+                    error: errorDetails.join(', ')
+                }
+            }
+
+            const d = new Date(body.date)
+            const awal = new Date(`1-1-${d.getFullYear()}`)
+            const akhir = new Date(`1-1-${d.getFullYear() + 1}`)
+
+            const materailReceive = await prisma.$queryRaw`SELECT COUNT(id) AS total_material, DATE_FORMAT(arrival_date, "%c") AS mounth 
+            FROM material_receives
+            WHERE arrival_date > ${awal} AND arrival_date < ${akhir} 
+            GROUP BY mounth`
+
+            const materialRequest = await prisma.$queryRaw`SELECT DATE_FORMAT(a.prod_date, "%c") AS mounth,
+            SUM(CASE WHEN b.material_id IS NOT NULL AND b.batch_material_id IS NOT NULL THEN 2 ELSE 1 END) AS total_material 
+            FROM work_order a, part b 
+            WHERE (a.prod_date > ${awal} AND a.prod_date < ${akhir}) AND  a.id_part = b.id
+            GROUP BY mounth`
+
+            materailReceive.forEach((m) => {
+                m.total_material = Number(m.total_material);
+                m.mounth = Number(m.mounth)
+            });
+
+            materialRequest.forEach((m) => {
+                m.total_material = Number(m.total_material);
+                m.mounth = Number(m.mounth)
+            });
+
+            const mreceive = {
+                "total_material": 0
+            }
+            const mrequest = {
+                "total_material": 0
+            }
+
+            if (materailReceive.length > 0) {
+                const m = materailReceive.find(m => m.mounth == d.getMonth() + 1)
+                if (m != undefined) {
+                    mreceive.total_material = m.total_material
+                }
+            }
+
+            if (materialRequest.length > 0) {
+                const m = materialRequest.find(m => m.mounth == d.getMonth() + 1)
+                if (m != undefined) {
+                    mrequest.total_material = m.total_material
+                }
+            }
 
             return {
                 status: true,
                 code: 201,
-                data: amount
+                data: [
+                    {
+                        chart: {materailReceive, materialRequest}
+                    },
+                    {
+                        materialreceive: mreceive.total_material
+                    },
+                    {
+                        materialreceive: mrequest.total_material
+                    }
+                ]
             }
         } catch (error) {
-            console.error('amount material receive module Error: ', error);
+            console.error('Dashboard material receive module Error: ', error);
             return {
                 status: false,
                 error

@@ -7,8 +7,8 @@ class wodetail{
             data.forEach(async function(i){
                 for(let index=0; index<i.total_box;index++){
                     //console.log(i)                        
-                    console.log(i.id)                        
-                    console.log(i.quantity_perbox)
+                    // console.log(i.id)                        
+                    // console.log(i.quantity_perbox)
                     inputwodetail = await prisma.workOrderDetail.createMany({
                         data: {
                             work_order_id: i.id,
@@ -16,7 +16,7 @@ class wodetail{
                             quantity_ng: 0,
                         }
                     })
-                    console.log(inputwodetail)
+                    // console.log(inputwodetail)
                 }
             })
             return {

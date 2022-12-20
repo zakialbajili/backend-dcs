@@ -205,14 +205,15 @@ model Part {
   quantity            Int
   part_image          String?
   supplier            Supplier      @relation(fields: [supplier_id], references: [id])
-  material            Material      @relation(fields: [material_id], references: [id])
-  batch_material      BatchMaterial @relation(fields: [batch_material_id], references: [id])
+  material            Material?     @relation(fields: [material_id], references: [id])
+  batch_material      BatchMaterial? @relation(fields: [batch_material_id], references: [id])
   supplier_id         Int
-  material_id         Int
-  batch_material_id   Int
+  material_id         Int?
+  batch_material_id   Int?
   created_at          DateTime      @default(now())
   updated_at          DateTime      @updatedAt
   delivery            delivery[]
+  work_order          work_order[]
 }
 
 model history_work_order {
@@ -228,8 +229,10 @@ model work_order {
   history_work_order history_work_order @relation(fields: [id_file], references: [id])
   id_file            Int
   no_work_order      String             @db.Char(200)
-  part_name          String             @db.Char(200)
-  part_number        String             @db.Char(200)
+  Part               Part               @relation(fields: [id_part], references: [id])
+  id_part            Int
+  // part_name          String             @db.Char(200)
+  // part_number        String             @db.Char(200)
   customer           String             @db.Char(200)
   prod_date          DateTime           @default(now())
   quantity_perbox    Int

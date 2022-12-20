@@ -28,9 +28,26 @@ class _wo {
             }
             var workbook = XLSX.readFile(body.path)
             let worksheets = {}
+
             for (const sheetName of workbook.SheetNames){
                 worksheets[sheetName] = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName])
             }
+
+            const part = await prisma.part.findMany()
+
+            let indexCheck = 0
+            while (indexCheck < worksheets.Sheet1.length) {
+                if (!part.find(p => p.part_number === worksheets.Sheet1[indexCheck].part_number)) {
+                    console.error("data part column " + (indexCheck + 1) + " not found on database")
+                    return {
+                        status: false,
+                        code: 401,
+                        error: "data part column " + (indexCheck + 1) + " not found on database"
+                    }
+                }
+                indexCheck++
+            }
+
             const inputhwo= await prisma.history_work_order.create({
                 data:{
                     name_file:body.filename
@@ -41,7 +58,7 @@ class _wo {
             var data=[]
             let addWo
             for (let i = 0; i< worksheets.Sheet1.length; i++){
-                console.log(worksheets.Sheet1)
+                // console.log(worksheets.Sheet1)
                 let part_number=worksheets.Sheet1[i].part_number
                 let part_name=worksheets.Sheet1[i].part_name
                 let no_work_order=worksheets.Sheet1[i].no_work_order
@@ -50,6 +67,7 @@ class _wo {
                 let total_order=worksheets.Sheet1[i].total_order
                 total_box=total_order/quantity_perbox
                 let supplier_id=worksheets.Sheet1[i].supplier
+
                 let history_work_order = await prisma.history_work_order.findFirst({
                     where:{
                         id:inputhwo.id
@@ -58,7 +76,8 @@ class _wo {
                         id:true
                     }
                 })
-                let supplier = await prisma.Supplier.findFirst({
+
+                let supplier = await prisma.supplier.findFirst({
                     where: {
                         name: supplier_id
                     },
@@ -66,6 +85,7 @@ class _wo {
                         id: true
                     }
                 })
+
                 if (!supplier) {
                     return {
                         status: false,
@@ -73,18 +93,27 @@ class _wo {
                         error: 'Supplier not found'
                     }
                 }    
+
+                const id_part = await prisma.part.findFirst({
+                    where: {
+                        part_number: part_number
+                    },
+                    select: {
+                        id: true
+                    }
+                })
+
                 addWo = await prisma.work_order.create({
                     data: {
                         id_file: history_work_order.id,
-                        part_name: part_name,
-                        no_work_order: no_work_order,
+                        no_work_order: String(no_work_order),
                         customer : customer,
                         quantity_perbox: quantity_perbox,
                         total_order: total_order,
                         total_box: total_box,
                         supplier_id: supplier.id,
-                        part_number:part_number
-                     }
+                        id_part: id_part.id
+                    }
                 })
                 data.push(addWo)
             }
@@ -250,7 +279,7 @@ class _wo {
                         error
                     }
                 }
-            }
+    }
             
 }
 module.exports = new _wo()

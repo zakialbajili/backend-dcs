@@ -17,6 +17,8 @@ const FGproductionController = require('./controllers/FGProductionController');
 const FGStockOpnameController = require('./controllers/FGStockOpnameController');
 const MaterialStockController = require('./controllers/MaterialStockController');
 const MonitoringRackController = require('./controllers/MonitoringRackController');
+const MaterialRequestController = require('./controllers/MaterialRequestController');
+
 
 const _routes = [
   ['users', UserController],
@@ -24,6 +26,7 @@ const _routes = [
   ['userRoles', UserRoleController],
   ['rack', RackController],
   ['materialReceive', MaterialReceiveController],
+  ['materialRequest', MaterialRequestController],
   ['batch', BatchController],
   ['placement', PlacementController],
   ['seeder', SeederController],

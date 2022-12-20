@@ -6,16 +6,16 @@ const authorization = require('../middleware/auth-middleware')
 
 const MaterialReceiveController = Router()
 
-MaterialReceiveController.post('/upload', [upload.single("file"), authorization], async (req, res) => {
+MaterialReceiveController.post('/upload', [authorization, upload.single("file")], async (req, res) => {
     const upload = await m$receive.upload(req)
 
     response.sendResponse(res, upload)
 })
 
-MaterialReceiveController.get('/amount', authorization, async (req, res) => {
-    const amount = await m$receive.amount()
+MaterialReceiveController.get('/dashboard', authorization, async (req, res) => {
+    const dashboard = await m$receive.dashboard(req.body)
 
-    response.sendResponse(res, amount)
+    response.sendResponse(res, dashboard)
 })
 
 MaterialReceiveController.get('/', authorization, async (req, res) => {
