@@ -480,7 +480,7 @@ class _receive {
                         materialreceive: mreceive.total_material
                     },
                     {
-                        materialreceive: mrequest.total_material
+                        materialrequest: mrequest.total_material
                     }
                 ]
             }
