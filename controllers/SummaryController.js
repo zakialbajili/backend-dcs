@@ -6,13 +6,22 @@ const auth = require("../middleware/auth-middleware")
 const SummaryController = Router()
 
 SummaryController.get('/ng/', auth, async (req, res) => {
-    let materialId = req.query.materialid;
+    let partId = req.query.partid;
     let month = req.query.month;
 
-    const list = await m$summary.listSummaryNG({ materialId: materialId, month: month });
+    const list = await m$summary.listSummaryNG({ partId: partId, month: month });
 
     response.sendResponse(res, list);
 });
+
+SummaryController.get('/ng/date/:tanggal', auth, async (req, res) => {
+    let tanggal = req.params.tanggal;
+    let enddate = req.query.enddate;
+
+    const list = await m$summary.listSummaryNGDate({tanggal: tanggal, enddate: enddate});
+
+    response.sendResponse(res, list);
+})
 
 SummaryController.get('/dpa', auth, async (req, res) => {
     let month = req.query.month;
@@ -30,5 +39,14 @@ SummaryController.get('/dpa/week/:week', auth, async (req, res) => {
 
     response.sendResponse(res, list);
 });
+
+SummaryController.get('/dpa/date/:tanggal', auth, async (req, res) => {
+    let tanggal = req.params.tanggal;
+    let enddate = req.query.enddate;
+
+    const list = await m$summary.listSummaryDPADate({tanggal: tanggal, enddate: enddate});
+
+    response.sendResponse(res, list);
+})
 
 module.exports = SummaryController;

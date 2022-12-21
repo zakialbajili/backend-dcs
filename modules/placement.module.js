@@ -123,16 +123,16 @@ class _placement {
             //     if (
             //         (i.PlacementRack[0].material_receive.material_id === materialReceive.MaterialReceive[0].material_id) &&
             //         (i.PlacementRack[0].material_receive.batch_material_id === materialReceive.MaterialReceive[0].batch_material_id) &&
-            //         ((i.PlacementRack.reduce((acc, j) => acc + j.material_receive.weight, 0) + materialReceive.MaterialReceive[0].weight) * 1000) < i.max_capacity
+            //         ((i.PlacementRack.reduce((acc, j) => acc + j.material_receive.weight, 0) + weight) * 1000) < i.max_capacity
             //     ){
-            //         // console.log(((i.PlacementRack.reduce((acc, j) => acc + j.material_receive.weight, 0) + materialReceive.MaterialReceive[0].weight) * 1000))
+            //         // console.log(((i.PlacementRack.reduce((acc, j) => acc + j.material_receive.weight, 0) + weight) * 1000))
             //         return i
             //     }
             // })
 
             // cari rak yang kosong
             // if (!rack) {
-            //     rack = kosong.find((i) => i.max_capacity > materialReceive.MaterialReceive[0].weight * 1000)
+            //     rack = kosong.find((i) => i.max_capacity > weight * 1000)
             // }
 
             // if (!rack) {
@@ -168,6 +168,8 @@ class _placement {
                 }
             })
 
+            //cari berat di MaterialReceive dengan id sesuai request
+            const weight = materialReceive.MaterialReceive.find(m => m.id == body.id).weight
 
             let cek = true;
             while (cek == true && placement) {
@@ -190,7 +192,7 @@ class _placement {
                 })
 
                 // cek apakah rak masih bisa menampung material
-                if ((sumWeight._sum.weight + materialReceive.MaterialReceive[0].weight) * 1000 > placement.max_capacity) {
+                if ((sumWeight._sum.weight + weight) * 1000 > placement.max_capacity) {
                     // tidak dapat menampung
                     // cari rak lain yang berisi material yang sama
                     // jika tidak ada (null) looping berhenti
@@ -231,7 +233,7 @@ class _placement {
                     where: {
                         type: materialReceive.MaterialReceive[0].type,
                         max_capacity: {
-                            gte: materialReceive.MaterialReceive[0].weight * 1000
+                            gte: weight * 1000
                         },
                         PlacementRack: {
                             none: {}
@@ -247,6 +249,16 @@ class _placement {
                     error: "All Rack isn't available"
                 }
             }
+
+            materialReceive = await prisma.materialReceive.findFirst({
+                where: {
+                    id: body.id
+                },
+                include: {
+                    material: true,
+                    batch_material: true
+                }
+            })
 
             return {
                 status: true,
