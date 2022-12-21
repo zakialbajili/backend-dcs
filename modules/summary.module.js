@@ -159,7 +159,7 @@ class _summary {
 
             if (enddate == undefined) {
                 const filteredList = listNG.data.filter(function (item) {
-                    const dateItem = item.created_at.substring(0, 9) == tanggal;
+                    const dateItem = item.created_at.substring(0, 10) == tanggal;
                     return dateItem;
                 });
 
@@ -173,8 +173,8 @@ class _summary {
                 };
             } else {
                 const filteredList = listNG.data.filter(function (item) {
-                    const dateItem = item.created_at.substring(0, 9);
-                    const endTangal = item.created_at.substring(0, 9);
+                    const dateItem = item.created_at.substring(0, 10);
+                    const endTangal = item.created_at.substring(0, 10);
                     console.log(endTangal)
                     
                     return dateItem  >= tanggal && dateItem <= endTangal;;
@@ -228,7 +228,7 @@ class _summary {
         try {
             if (enddate == undefined) {
                 const filteredList = listNG.data.filter(function (item) {
-                    const dateItem = item.created_at.substring(0, 9) == tanggal;
+                    const dateItem = item.created_at.substring(0, 10) == tanggal;
                     return dateItem;
                 });
 
@@ -239,8 +239,8 @@ class _summary {
                 };
             } else {
                 const filteredList = listNG.data.filter(function (item) {
-                    const dateItem = item.created_at.substring(0, 9);
-                    const endTangal = item.created_at.substring(0, 9);
+                    const dateItem = item.created_at.substring(0, 10);
+                    const endTangal = item.created_at.substring(0, 10);
                     console.log(endTangal)
                     
                     return dateItem  >= tanggal && dateItem <= endTangal;;
