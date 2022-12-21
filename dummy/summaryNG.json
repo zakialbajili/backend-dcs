@@ -2,9 +2,9 @@
     "data": [
         {
             "id": 1,
-            "material_id": 1,
-            "material_number": "HY-ABS518-A",
-            "material_name": "ABS SR03250",
+            "part_id": 1,
+            "part_number": "HY-ABS518-A",
+            "part_name": "ABS SR03250",
             "qty_ng": [
                 {
                     "name": "dented",
@@ -29,9 +29,9 @@
         },
         {
             "id": 2,
-            "material_id": 2,
-            "material_number": "HY-ABS518-B",
-            "material_name": "ABS SR03251",
+            "part_id": 2,
+            "part_number": "HY-ABS518-B",
+            "part_name": "ABS SR03251",
             "qty_ng": [
                 {
                     "name": "dented",
@@ -47,10 +47,10 @@
             "updated_at": "2022-12-6 06:50:54.569"
         }, 
         {
-            "id": 2,
-            "material_id": 2,
-            "material_number": "HY-ABS518-C",
-            "material_name": "ABS SR03252",
+            "id": 3,
+            "part_id": 3,
+            "part_number": "HY-ABS518-C",
+            "part_name": "ABS SR03252",
             "qty_ng": [
                 {
                     "name": "dented",
@@ -70,10 +70,10 @@
             "updated_at": "2022-12-6 06:50:54.569"
         }, 
         {
-            "id": 3,
-            "material_id": 3,
-            "material_number": "HY-ABS518-D",
-            "material_name": "ABS SR03253",
+            "id": 4,
+            "part_id": 4,
+            "part_number": "HY-ABS518-D",
+            "part_name": "ABS SR03253",
             "qty_ng": [
                 {
                     "name": "burnmark",
@@ -93,10 +93,10 @@
             "updated_at": "2022-12-6 06:50:54.569"
         },
         {
-            "id": 4,
-            "material_id": 1,
-            "material_number": "HY-ABS518-E",
-            "material_name": "ABS SR03254",
+            "id": 5,
+            "part_id": 5,
+            "part_number": "HY-ABS518-E",
+            "part_name": "ABS SR03254",
             "qty_ng": [
                 {
                     "name": "dented",
@@ -120,10 +120,10 @@
             "updated_at": "2022-11-6 06:50:54.569"
         },
         {
-            "id": 5,
-            "material_id": 2,
-            "material_number": "HY-ABS518-F",
-            "material_name": "ABS SR03255",
+            "id": 6,
+            "part_id": 6,
+            "part_number": "HY-ABS518-F",
+            "part_name": "ABS SR03255",
             "qty_ng": [
                 {
                     "name": "dented",
@@ -139,10 +139,10 @@
             "updated_at": "2022-11-6 06:50:54.569"
         }, 
         {
-            "id": 6,
-            "material_id": 2,
-            "material_number": "HY-ABS518-G",
-            "material_name": "ABS SR03256",
+            "id": 7,
+            "part_id": 7,
+            "part_number": "HY-ABS518-G",
+            "part_name": "ABS SR03256",
             "qty_ng": [
                 {
                     "name": "dented",
@@ -162,10 +162,10 @@
             "updated_at": "2022-11-6 06:50:54.569"
         }, 
         {
-            "id": 7,
-            "material_id": 3,
-            "material_number": "HY-ABS518-H",
-            "material_name": "ABS SR03257",
+            "id": 8,
+            "part_id": 8,
+            "part_number": "HY-ABS518-H",
+            "part_name": "ABS SR03257",
             "qty_ng": [
                 {
                     "name": "burnmark",

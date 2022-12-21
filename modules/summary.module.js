@@ -3,7 +3,7 @@ const Joi = require("joi")
 const listNG = require("../dummy/summaryNG.json")
 const listDPA = require("../dummy/summaryDPA.json")
 const jwt = require('jsonwebtoken')
-const { number } = require("joi")
+const { number, date } = require("joi")
 const dayjs = require("dayjs")
 const weekOfYear = require('dayjs/plugin/weekOfYear')
 
@@ -14,7 +14,7 @@ dayjs.extend(weekOfYear)
 
 class _summary {
     // Summary NG
-    listSummaryNG = async ({ materialId: materialId, month: month }) => {
+    listSummaryNG = async ({ partId: partId, month: month }) => {
         try {
             const total = [];
             let sum = 0;
@@ -38,9 +38,9 @@ class _summary {
                 sumArray(total);
             }
 
-            if (materialId != undefined && month == undefined) {
+            if (partId != undefined && month == undefined) {
                 const filteredList = listNG.data.filter(function (item) {
-                    return item.material_id == materialId;
+                    return item.part_id == partId;
                 });
 
                 totalSum(filteredList);
@@ -51,7 +51,7 @@ class _summary {
                     list: filteredList,
                     total_ng: sum
                 };
-            } else if (materialId == undefined && month != undefined) {
+            } else if (partId == undefined && month != undefined) {
                 const filteredList = listNG.data.filter(function (item) {
                     const monthItem = item.created_at.substring(5, 7);
                     return monthItem == month;
@@ -65,10 +65,10 @@ class _summary {
                     list: filteredList,
                     total_ng: sum
                 };
-            } else if ((materialId != undefined && month != undefined)) {
+            } else if ((partId != undefined && month != undefined)) {
                 const filteredList = listNG.data.filter(function (item) {
                     const monthItem = item.created_at.substring(5, 7);
-                    return monthItem == month && item.material_id == materialId;
+                    return monthItem == month && item.part_id == partId;
                 });
 
                 totalSum(filteredList);
@@ -130,6 +130,75 @@ class _summary {
         };
     };
 
+    listSummaryNGDate = async ({ tanggal: tanggal, enddate: enddate }) => {
+        try {
+
+            const total = [];
+            let sum = 0;
+
+            console.log(tanggal);
+
+            function totalSum(filtered) {
+                filtered.filter(function (item) {
+                    const totalAll = item.total;
+                    total.push(totalAll);
+                    return totalAll;
+                });
+
+                function sumArray(array) {
+                    array.forEach(item => {
+                        sum += item;
+                    });
+
+                    // console.log(total);
+                    return sum;
+                };
+
+                sumArray(total);
+            }
+
+            if (enddate == undefined) {
+                const filteredList = listNG.data.filter(function (item) {
+                    const dateItem = item.created_at.substring(0, 9) == tanggal;
+                    return dateItem;
+                });
+
+                totalSum(filteredList);
+
+                return {
+                    status: true,
+                    code: 200,
+                    list: filteredList,
+                    total_ng: sum
+                };
+            } else {
+                const filteredList = listNG.data.filter(function (item) {
+                    const dateItem = item.created_at.substring(0, 9);
+                    const endTangal = item.created_at.substring(0, 9);
+                    console.log(endTangal)
+                    
+                    return dateItem  >= tanggal && dateItem <= endTangal;;
+                });
+
+                totalSum(filteredList);
+
+                return {
+                    status: true,
+                    code: 200,
+                    list: filteredList,
+                    total_ng: sum
+                };
+            }
+        }
+        catch (error) {
+            console.error('list summary NG Date module Error: ', error);
+            return {
+                status: false,
+                error
+            };
+        };
+    }
+
     // Summary DPA Weekly
     // Week yang lengkap 50
     listSummaryDPAWeek = async ({ week: week }) => {
@@ -144,7 +213,7 @@ class _summary {
                 code: 200,
                 list: filteredList
             };
-s
+            
         }
         catch (error) {
             console.error('list summary DPA Week module Error: ', error);
@@ -154,6 +223,44 @@ s
             };
         };
     };
+
+    listSummaryDPADate = async ({ tanggal: tanggal, enddate: enddate }) => {
+        try {
+            if (enddate == undefined) {
+                const filteredList = listNG.data.filter(function (item) {
+                    const dateItem = item.created_at.substring(0, 9) == tanggal;
+                    return dateItem;
+                });
+
+                return {
+                    status: true,
+                    code: 200,
+                    list: filteredList,
+                };
+            } else {
+                const filteredList = listNG.data.filter(function (item) {
+                    const dateItem = item.created_at.substring(0, 9);
+                    const endTangal = item.created_at.substring(0, 9);
+                    console.log(endTangal)
+                    
+                    return dateItem  >= tanggal && dateItem <= endTangal;;
+                });
+
+                return {
+                    status: true,
+                    code: 200,
+                    list: filteredList,
+                };
+            }
+        }
+        catch (error) {
+            console.error('list summary DPA Date module Error: ', error);
+            return {
+                status: false,
+                error
+            };
+        };
+    }
 };
 
 module.exports = new _summary;
