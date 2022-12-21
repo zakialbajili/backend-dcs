@@ -227,7 +227,7 @@ class _summary {
     listSummaryDPADate = async ({ tanggal: tanggal, enddate: enddate }) => {
         try {
             if (enddate == undefined) {
-                const filteredList = listNG.data.filter(function (item) {
+                const filteredList = listDPA.data.filter(function (item) {
                     const dateItem = item.created_at.substring(0, 10) == tanggal;
                     return dateItem;
                 });
@@ -238,7 +238,7 @@ class _summary {
                     list: filteredList,
                 };
             } else {
-                const filteredList = listNG.data.filter(function (item) {
+                const filteredList = listDPA.data.filter(function (item) {
                     const dateItem = item.created_at.substring(0, 10);
                     const endTangal = item.created_at.substring(0, 10);
                     console.log(endTangal)
