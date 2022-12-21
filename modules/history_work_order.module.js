@@ -155,31 +155,30 @@ class _wo {
     }
     listwo=async (req)=>{
         try{
-            console.log(req)
+            
             const list = await prisma.work_order.findMany({
-                where:{
-                    id_file:req
-                },
-                select:{
-                    id_part:{
-                        select:{
-                            part_number:true,
-                            part_name: true,
-                        }
+                    where:{
+                        id_file:req
                     },
-                    no_work_order: true,
-                    customer: true,
-                    prod_date: true,
-                    quantity_perbox: true,
-                    total_order: true,
-                    total_box: true,
-                    supplier:{
-                        select:{
-                            name: true
+                    /*select:{
+                        no_work_order: true,
+                        customer: true,
+                        prod_date: true,
+                        quantity_perbox: true,
+                        total_order: true,
+                        total_box: true,
+                        id_part:{
+                            select:{
+                                part_number:true,
+                                part_name: true,
+                            }
+                        },
+                        supplier:{
+                            select:{
+                                name: true
+                            }
                         }
-                    }
-                }
-
+                    }*/
             })
             return {
                 status: true,
@@ -267,11 +266,11 @@ class _wo {
         }
     }
         
-    deletehwo = async (id) => {
+    deletehwo = async (req) => {
             try {
                 const schema = Joi.number().required()
     
-                const validation = schema.validate(id)
+                const validation = schema.validate(req)
 
                 if (validation.error) {
                     const errorDetails = validation.error.details.map(detail => detail.message)
@@ -284,11 +283,20 @@ class _wo {
                 }
                 const data = await prisma.history_work_order.delete({
                     where: {
-                        id: id
+                        id: req
                     }
                 })
-                    return{
-    
+                const deletewo = await prisma.work_order.deleteMany({
+                    where: {
+                        id_file:data.id
+                    }
+                })
+                /*const deletewod=await prisma.workOrderDetail.deleteMany({
+                    where:{
+                        work_order_id:deletewo.id
+                    }
+                })*/
+                    return{    
                         status: true,
                         data: data
                     }

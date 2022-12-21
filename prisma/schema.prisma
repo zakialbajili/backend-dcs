@@ -226,10 +226,10 @@ model history_work_order {
 
 model work_order {
   id                 Int                @id @default(autoincrement())
-  history_work_order history_work_order @relation(fields: [id_file], references: [id])
+  history_work_order history_work_order @relation(fields: [id_file], references: [id], onUpdate: Cascade, onDelete: Cascade)
   id_file            Int
   no_work_order      String             @db.Char(200)
-  Part               Part               @relation(fields: [id_part], references: [id])
+  Part               Part               @relation(fields: [id_part], references: [id], onUpdate: Cascade, onDelete: Cascade)
   id_part            Int
   // part_name          String             @db.Char(200)
   // part_number        String             @db.Char(200)
@@ -278,7 +278,7 @@ model FileWorkOrder {
 
 model WorkOrderDetail {
   id                Int               @id @default(autoincrement())
-  work_order        work_order        @relation(fields: [work_order_id], references: [id])
+  work_order        work_order        @relation(fields: [work_order_id], references: [id],onUpdate: Cascade, onDelete: Cascade)
   work_order_id     Int
   quantity          Int
   quantity_ng       Int               @default(0)
