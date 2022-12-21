@@ -2,6 +2,7 @@ const prisma = require("../helpers/database")
 const Joi = require("joi")
 const XLSX = require ('xlsx')
 const m$wodetail = require('./work_order_detail.module')
+const { supplier } = require("../helpers/database")
 class _wo {
     upload_wo = async (body)=>{
         try{
@@ -94,7 +95,7 @@ class _wo {
                     }
                 }    
 
-                const id_part = await prisma.part.findFirst({
+                let id_part = await prisma.part.findFirst({
                     where: {
                         part_number: part_number
                     },
@@ -160,25 +161,26 @@ class _wo {
                     where:{
                         id_file:req
                     },
-                    /*select:{
+                    select:{
+                        id:true,
+                        Part:{
+                            select:{
+                                part_name:true,
+                                part_number:true
+                            }
+                        },
                         no_work_order: true,
                         customer: true,
                         prod_date: true,
                         quantity_perbox: true,
                         total_order: true,
                         total_box: true,
-                        id_part:{
-                            select:{
-                                part_number:true,
-                                part_name: true,
-                            }
-                        },
                         supplier:{
                             select:{
                                 name: true
                             }
                         }
-                    }*/
+                    }
             })
             return {
                 status: true,

@@ -36,24 +36,9 @@ class wodetail{
     listwodetail=async(data)=>{
         try{
             const list= await prisma.workOrderDetail.findMany({
-                select:{
-                    id: true,
-                    quantity: true,
-                    quantity_ng: true,
-                    work_order:{
-                        select:{
-                            id:true,
-                            part_number:true,
-                            part_name: true,
-                            no_work_order: true,
-                            quantity_perbox:true,
-                            prod_date:true,
-                            supplier:{
-                                select:{
-                                    name:true
-                                }
-                            }
-                        }
+                work_order:{
+                    select:{
+                        id: true
                     }
                 }
             })
@@ -80,8 +65,12 @@ class wodetail{
                 },
                 select:{
                     id:true,
-                    part_number: true,
-                    part_name: true,
+                    Part:{
+                        select:{
+                            part_name:true,
+                            part_number:true
+                        }
+                    },
                     no_work_order: true,
                     quantity_perbox:true,
                     prod_date:true,
