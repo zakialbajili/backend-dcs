@@ -139,6 +139,7 @@ class _request{
                 })
             }else if (listbatch.length > 0 && listmaterial.length == 0) {
                 listbatch.forEach(b => {
+                    b.bat_weight = Number(b.bat_weight)
                     Object.assign(b, {
                         "material_number": "-",
                         "material_name" : "-",
