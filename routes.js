@@ -18,6 +18,7 @@ const FGStockOpnameController = require('./controllers/FGStockOpnameController')
 const MaterialStockController = require('./controllers/MaterialStockController');
 const MonitoringRackController = require('./controllers/MonitoringRackController');
 const MaterialRequestController = require('./controllers/MaterialRequestController');
+const DeliveryController = require('./controllers/deliveryController')
 
 
 const _routes = [
@@ -41,6 +42,7 @@ const _routes = [
   ['mStocks', MaterialStockController],
   ['work_order_detail', wodController],
   ['Monitoring', MonitoringRackController],
+  ['delivery', DeliveryController]
 ];
 
 const routes = (app) => {
