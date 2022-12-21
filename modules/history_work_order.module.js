@@ -99,7 +99,9 @@ class _wo {
                         part_number: part_number
                     },
                     select: {
-                        id: true
+                        id: true,
+                        part_number:true,
+                        part_name:true
                     }
                 })
 
@@ -158,6 +160,25 @@ class _wo {
                 where:{
                     id_file:req
                 },
+                select:{
+                    id_part:{
+                        select:{
+                            part_number:true,
+                            part_name: true,
+                        }
+                    },
+                    no_work_order: true,
+                    customer: true,
+                    prod_date: true,
+                    quantity_perbox: true,
+                    total_order: true,
+                    total_box: true,
+                    supplier:{
+                        select:{
+                            name: true
+                        }
+                    }
+                }
 
             })
             return {
